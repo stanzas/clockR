@@ -25,25 +25,25 @@ GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Button 1 => display time
 def button1(channel):
-  global display_mode
+  global nCommand
   print("button1 pressed")
   nCommand = 1
 
 # Button 2 => show Mod2
 def button2(channel):
-  global display_mode
+  global nCommand
   print("button2 pressed")
   nCommand = 2
 
 # Buton 3 => brightness
 def button3(channel):
-  global display_mode, iBrightness
-  print("button3 pressed - ", iBrightness)
+  global iBrightness
   if (iBrightness >= 7):
     iBrightness = 0
   else:
     iBrightness = iBrightness + 1
   tm.brightness(iBrightness)
+  print("button3 pressed - ", iBrightness)
 
 # when a falling edge is detected on port 17, regardless of whatever
 # else is happening in the program, the function my_callback will be run
@@ -76,8 +76,6 @@ while True:
 #      cmd = 'ifconfig wlan0 up'
 #      os.system(cmd)
       tm.show("WON-")
-
-
 
   # == commands ==
   if (nCommand == 1):
