@@ -45,18 +45,23 @@ def button3(channel):
   tm.brightness(iBrightness)
   print("button3 pressed - ", iBrightness)
 
-# when a falling edge is detected on port 17, regardless of whatever
-# else is happening in the program, the function my_callback will be run
-GPIO.add_event_detect(BTN_ONE, GPIO.FALLING, callback=button1, bouncetime=300)
-GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
-GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
 
-bIsWifiActivated = 1
-nDisplay = 1
-nCommand = 0
-x = 0
-while True:
+def fCommands():
+  global nCommand, nDisplay, bIsWifiActivated
+  # == commands ==
+  if (nCommand == 1):
+    nCommand = 0
+    nDisplay = 1
+  elif (nCommand == 2):
+    nCommand = 0
+    nDisplay = 2
+    if (bIsWifiActivated == 1):
+      bIsWifiActivated = 0
+    else:
+      bIsWifiActivated = 1
 
+def fDisplay():
+  global nDisplay, x
   # display time
   if (nDisplay == 1):
     if (x!=1):
@@ -77,15 +82,20 @@ while True:
 #      os.system(cmd)
       tm.show("WON-")
 
-  # == commands ==
-  if (nCommand == 1):
-    nDisplay = 1
-  elif (nCommand == 2):
-    nDisplay = 2
-    if (bIsWifiActivated == 1):
-      bIsWifiActivated = 0
-    else:
-      bIsWifiActivated = 1
+
+# when a falling edge is detected on port 17, regardless of whatever
+# else is happening in the program, the function my_callback will be run
+GPIO.add_event_detect(BTN_ONE, GPIO.FALLING, callback=button1, bouncetime=300)
+GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
+GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
+
+bIsWifiActivated = 1
+nDisplay = 1
+nCommand = 0
+x = 0
+while True:
+  fCommands()
+  fDisplay()
 
   time.sleep(1)
 
