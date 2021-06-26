@@ -69,10 +69,10 @@ def fCommands():
     # button 2: play/stop
     if (nButton == 2):
       if (bMusicPlay == 0):
-        subprocess.call(["music123","/home/pi/M.\ Pokora\ -\ PYRAMIDE/11\ -\ Tombé.mp3"])
+        p = subprocess.Popen(["music123","11.mp3"])
         bMusicPlay = 1
       elif (bMusicPlay == 1):
-        subprocess.call(["sudo","pkill","music123"])
+        p = subprocess.Popen(["sudo","pkill","music123"])
         bMusicPlay = 0
 
   # => mode 2: wifi
