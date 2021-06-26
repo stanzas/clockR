@@ -26,15 +26,15 @@ GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Button 1 => display time
 def button1(channel):
-  global nCommand
+  global nButton
   print("button1 pressed")
-  nCommand = 1
+  nButton = 1
 
 # Button 2 => show Mod2
 def button2(channel):
-  global nCommand
+  global nButton
   print("button2 pressed")
-  nCommand = 2
+  nButton = 2
 
 # Buton 3 => brightness
 def button3(channel):
@@ -48,29 +48,50 @@ def button3(channel):
 
 
 def fCommands():
-  global nCommand, nDisplay, bIsWifiActivated
-  # == commands ==
-  if (nCommand == 1):
-    nCommand = 0
-    nDisplay = 1
-  elif (nCommand == 2):
-    nCommand = 0
-    nDisplay = 2
-    if (bIsWifiActivated == 1):
-#      cmd = 'ifconfig wlan0 down'
-#      os.system(cmd)
-      subprocess.call(["sudo","ifconfig","wlan0","down"])
-      bIsWifiActivated = 0
+  global nButton, nDisplay, bIsWifiActivated, bMusicPlay
+
+  # Button 1: toggle functions
+  if (nButton == 1):
+    nButton = 0
+    if (nMode >= 2):
+      nMode = 0
     else:
-#      cmd = 'ifconfig wlan0 up'
-#      os.system(cmd)
-      subprocess.call(["sudo","ifconfig","wlan0","up"])
-      bIsWifiActivated = 1
+      nMode = nMode + 1
+
+  # => mode 0: time
+  if (nMode == 0):
+    nDisplay = 0
+
+  # => mode 1: mp3
+  elif (nMode == 1):
+    nDisplay = 1
+
+    # button 2: play/stop
+    if (nButton == 2):
+      if (bMusicPlay == 0):
+        subprocess.call(["music123","~/M.\ Pokora\ -\ PYRAMIDE/11\ -\ Tombé.mp3"])
+        bMusicPlay = 1
+      else (bMusicPlay == 1):
+        subprocess.call(["sudo","pkill","music123"])
+        bMusicPlay = 0
+
+  # => mode 2: wifi
+  elif (nMode == 2):
+    nDisplay = 2
+
+    if (nButton == 2):
+      if (bIsWifiActivated == 1):
+        subprocess.call(["sudo","ifconfig","wlan0","down"])
+        bIsWifiActivated = 0
+      else:
+        subprocess.call(["sudo","ifconfig","wlan0","up"])
+        bIsWifiActivated = 1
+
 
 def fDisplay():
-  global nDisplay, x
+  global nDisplay, x, bMusicPlay, bIsWifiActivated
   # display time
-  if (nDisplay == 1):
+  if (nDisplay == 0):
     if (x!=1):
       tm.numbers(now.hour, now.minute)
       x = 1
@@ -78,9 +99,14 @@ def fDisplay():
       tm.show(now.strftime("%H%M"))
       x = 0
 
-  # display
+  elif (nDisplay == 1):
+    if (bMusicPlay == 0):
+      tm.show("play")
+    else:
+      tm.show("stop")
+
   elif (nDisplay == 2):
-    if (bIsWifiActivated == 1):
+    if (bIsWifiActivated == 0):
       tm.show("WOFF")
     else:
       tm.show("WON-")
@@ -93,8 +119,9 @@ GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
 GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
 
 bIsWifiActivated = 1
+bMusicPlay = 0
 nDisplay = 1
-nCommand = 0
+nButton = 0
 x = 0
 iBrightness = 0
 tm.brightness(iBrightness)
