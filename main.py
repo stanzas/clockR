@@ -4,6 +4,7 @@ import os
 import time
 from datetime import datetime
 import tm1637
+import subprocess
 
 BTN_ONE = 17
 BTN_TWO = 27
@@ -56,12 +57,14 @@ def fCommands():
     nCommand = 0
     nDisplay = 2
     if (bIsWifiActivated == 1):
-      cmd = 'ifconfig wlan0 down'
-      os.system(cmd)
+#      cmd = 'ifconfig wlan0 down'
+#      os.system(cmd)
+      subprocess.call(["sudo","ifconfig","wlan0","down"])
       bIsWifiActivated = 0
     else:
-      cmd = 'ifconfig wlan0 up'
-      os.system(cmd)
+#      cmd = 'ifconfig wlan0 up'
+#      os.system(cmd)
+      subprocess.call(["sudo","ifconfig","wlan0","up"])
       bIsWifiActivated = 1
 
 def fDisplay():
