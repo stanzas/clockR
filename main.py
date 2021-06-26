@@ -53,6 +53,7 @@ GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
 
 bIsWifiActivated = 1
 nDisplay = 1
+nCommand = 0
 x = 0
 while True:
 
