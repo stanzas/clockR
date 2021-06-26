@@ -27,18 +27,18 @@ GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 def button1(channel):
   global display_mode
   print("button1 pressed")
-  display_mode = 1
+  nCommand = 1
 
 # Button 2 => show Mod2
 def button2(channel):
   global display_mode
   print("button2 pressed")
-  display_mode = 2
+  nCommand = 2
 
 # Buton 3 => brightness
 def button3(channel):
   global display_mode, iBrightness
-  print("button3 pressed")
+  print("button3 pressed - ", iBrightness)
   if (iBrightness >= 7):
     iBrightness = 0
   else:
@@ -52,7 +52,7 @@ GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
 GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
 
 bIsWifiActivated = 1
-display_mode = 1
+nDisplay = 1
 x = 0
 while True:
 
