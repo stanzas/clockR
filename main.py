@@ -56,8 +56,12 @@ def fCommands():
     nCommand = 0
     nDisplay = 2
     if (bIsWifiActivated == 1):
+      cmd = 'ifconfig wlan0 down'
+      os.system(cmd)
       bIsWifiActivated = 0
     else:
+      cmd = 'ifconfig wlan0 up'
+      os.system(cmd)
       bIsWifiActivated = 1
 
 def fDisplay():
@@ -74,12 +78,8 @@ def fDisplay():
   # display
   elif (nDisplay == 2):
     if (bIsWifiActivated == 1):
-#      cmd = 'ifconfig wlan0 down'
-#      os.system(cmd)
       tm.show("WOFF")
     else:
-#      cmd = 'ifconfig wlan0 up'
-#      os.system(cmd)
       tm.show("WON-")
 
 
@@ -93,10 +93,11 @@ bIsWifiActivated = 1
 nDisplay = 1
 nCommand = 0
 x = 0
+iBrightness = 0
+tm.brightness(iBrightness)
 while True:
   fCommands()
   fDisplay()
-
   time.sleep(1)
 
 GPIO.cleanup()
