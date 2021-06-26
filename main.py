@@ -71,7 +71,7 @@ def fCommands():
       if (bMusicPlay == 0):
         subprocess.call(["music123","~/M.\ Pokora\ -\ PYRAMIDE/11\ -\ Tombé.mp3"])
         bMusicPlay = 1
-      else (bMusicPlay == 1):
+      elif (bMusicPlay == 1):
         subprocess.call(["sudo","pkill","music123"])
         bMusicPlay = 0
 
