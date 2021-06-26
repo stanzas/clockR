@@ -77,9 +77,12 @@ while True:
 #      os.system(cmd)
       tm.show("WON-")
 
+
+
+  # == commands ==
   if (nCommand == 1):
     nDisplay = 1
-  elif (display_mode == 2):
+  elif (nCommand == 2):
     nDisplay = 2
     if (bIsWifiActivated == 1):
       bIsWifiActivated = 0
