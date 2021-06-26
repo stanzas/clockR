@@ -55,23 +55,34 @@ bIsWifiActivated = 1
 display_mode = 1
 x = 0
 while True:
-  if (display_mode == 1):
+
+  # display time
+  if (nDisplay == 1):
     if (x!=1):
       tm.numbers(now.hour, now.minute)
       x = 1
     else:
       tm.show(now.strftime("%H%M"))
       x = 0
-  elif (display_mode == 2):
-    if (bIsWifiActivated):
-      cmd = 'ifconfig wlan0 down'
-      os.system(cmd)
+
+  # display
+  elif (nDisplay == 2):
+    if (bIsWifiActivated == 1):
+#      cmd = 'ifconfig wlan0 down'
+#      os.system(cmd)
       tm.show("WOFF")
+    else:
+#      cmd = 'ifconfig wlan0 up'
+#      os.system(cmd)
+      tm.show("WON-")
+
+  if (nCommand == 1):
+    nDisplay = 1
+  elif (display_mode == 2):
+    nDisplay = 2
+    if (bIsWifiActivated == 1):
       bIsWifiActivated = 0
     else:
-      cmd = 'ifconfig wlan0 up'
-      os.system(cmd)
-      tm.show("WON-")
       bIsWifiActivated = 1
 
   time.sleep(1)
