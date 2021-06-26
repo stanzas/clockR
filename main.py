@@ -48,7 +48,7 @@ def button3(channel):
 
 
 def fCommands():
-  global nButton, nDisplay, bIsWifiActivated, bMusicPlay
+  global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode
 
   # Button 1: toggle functions
   if (nButton == 1):
@@ -122,6 +122,7 @@ bIsWifiActivated = 1
 bMusicPlay = 0
 nDisplay = 1
 nButton = 0
+nMode = 0
 x = 0
 iBrightness = 0
 tm.brightness(iBrightness)
