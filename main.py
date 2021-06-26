@@ -63,12 +63,12 @@ while True:
       tm.show(now.strftime("%H%M"))
       x = 0
   elif (display_mode == 2):
-    if (bIsWifiActivated)
+    if (bIsWifiActivated):
       cmd = 'ifconfig wlan0 down'
       os.system(cmd)
       tm.show("WOFF")
       bIsWifiActivated = 0
-    else
+    else:
       cmd = 'ifconfig wlan0 up'
       os.system(cmd)
       tm.show("WON-")
