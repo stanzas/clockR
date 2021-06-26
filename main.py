@@ -52,7 +52,6 @@ def fCommands():
 
   # Button 1: toggle functions
   if (nButton == 1):
-    nButton = 0
     if (nMode >= 2):
       nMode = 0
     else:
@@ -86,6 +85,8 @@ def fCommands():
       else:
         subprocess.call(["sudo","ifconfig","wlan0","up"])
         bIsWifiActivated = 1
+
+  nButton = 0
 
 
 def fDisplay():
