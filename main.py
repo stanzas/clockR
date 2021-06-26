@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import sys
+import os
 import time
 from datetime import datetime
 import tm1637
@@ -18,20 +19,23 @@ now = datetime.now()
 
 # set the buttons
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)  
-GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)  
-GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)  
+GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-def button1(channel):  
+# Button 1 => display time
+def button1(channel):
   global display_mode
   print("button1 pressed")
   display_mode = 1
 
+# Button 2 => show Mod2
 def button2(channel):
   global display_mode
   print("button2 pressed")
   display_mode = 2
 
+# Buton 3 => brightness
 def button3(channel):
   global display_mode, iBrightness
   print("button3 pressed")
@@ -41,12 +45,13 @@ def button3(channel):
     iBrightness = iBrightness + 1
   tm.brightness(iBrightness)
 
-# when a falling edge is detected on port 17, regardless of whatever   
-# else is happening in the program, the function my_callback will be run  
+# when a falling edge is detected on port 17, regardless of whatever
+# else is happening in the program, the function my_callback will be run
 GPIO.add_event_detect(BTN_ONE, GPIO.FALLING, callback=button1, bouncetime=300)
 GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
 GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
 
+bIsWifiActivated = 1
 display_mode = 1
 x = 0
 while True:
@@ -58,7 +63,16 @@ while True:
       tm.show(now.strftime("%H%M"))
       x = 0
   elif (display_mode == 2):
-    tm.show("Mod2")
+    if (bIsWifiActivated)
+      cmd = 'ifconfig wlan0 down'
+      os.system(cmd)
+      tm.show("WOFF")
+      bIsWifiActivated = 0
+    else
+      cmd = 'ifconfig wlan0 up'
+      os.system(cmd)
+      tm.show("WON-")
+      bIsWifiActivated = 1
 
   time.sleep(1)
 
@@ -93,7 +107,3 @@ tm.hex(0xbeef)
 
 # show temperature '24*C'
 #tm.temperature(24)
-
-
-
-
