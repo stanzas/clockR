@@ -38,17 +38,13 @@ def button2(channel):
 
 # Buton 3 => brightness
 def button3(channel):
-  global iBrightness
-  if (iBrightness >= 7):
-    iBrightness = 0
-  else:
-    iBrightness = iBrightness + 1
-  tm.brightness(iBrightness)
-  print("button3 pressed - ", iBrightness)
+  global nButton
+  print("button3 pressed")
+  nButton = 3
 
 
 def fCommands():
-  global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode
+  global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness
 
   # Button 1: toggle functions
   if (nButton == 1):
@@ -56,6 +52,16 @@ def fCommands():
       nMode = 0
     else:
       nMode = nMode + 1
+
+  # Button 3: toggle brightness
+  elif (nButton == 3):
+    print("button3 pressed - ", iBrightness)
+    if (iBrightness >= 7):
+      iBrightness = 0
+    else:
+      iBrightness = iBrightness + 1
+    tm.brightness(iBrightness)
+
 
   # => mode 0: time
   if (nMode == 0):
