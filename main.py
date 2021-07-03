@@ -5,11 +5,14 @@ import time
 from datetime import datetime
 import tm1637
 import subprocess
+import pygame
 
 BTN_ONE = 17
 BTN_TWO = 27
 BTN_THREE = 22
 iBrightness = 7
+
+pygame.mixer.init()
 
 # set the 7-segments display
 tm = tm1637.TM1637(clk=5, dio=4)
@@ -74,10 +77,15 @@ def fCommands():
     # button 2: play/stop
     if (nButton == 2):
       if (bMusicPlay == 0):
-        p = subprocess.Popen(["music123","11.mp3"])
+        #p = subprocess.Popen(["music123","11.mp3"])
+        pygame.mixer.music.load("11.mp3")
+        pygame.mixer.music.set_volume(1.0)
+        pygame.mixer.music.play()
+
         bMusicPlay = 1
       elif (bMusicPlay == 1):
-        p = subprocess.Popen(["sudo","pkill","music123"])
+        #p = subprocess.Popen(["sudo","pkill","music123"])
+        pygame.mixer.pause()
         bMusicPlay = 0
 
   # => mode 2: wifi
@@ -133,10 +141,13 @@ nMode = 0
 x = 0
 iBrightness = 0
 tm.brightness(iBrightness)
+print("=== starting ===")
 while True:
   fCommands()
   fDisplay()
   time.sleep(1)
+
+print("=== ending ===")
 
 GPIO.cleanup()
 sys.exit()
