@@ -10,6 +10,9 @@ import threading
 import queue
 import time
 
+tm = tm1637.TM1637(clk=5, dio=4)
+pygame.mixer.init()
+
 # Button 1 => display time
 def button1(channel):
   global nButton
@@ -116,17 +119,14 @@ def fDisplay():
 
 
 def main():
-  global bIsWifiActivated, bMusicPlay, nDisplay, nButton, nMode, x, iBrightness
+  global bIsWifiActivated, bMusicPlay, nDisplay, nButton, nMode, x, iBrightness, tm
 
   BTN_ONE = 17
   BTN_TWO = 27
   BTN_THREE = 22
   iBrightness = 7
 
-  pygame.mixer.init()
-
   # set the 7-segments display
-  tm = tm1637.TM1637(clk=5, dio=4)
   tm.brightness(iBrightness)
 
   # Get current time
