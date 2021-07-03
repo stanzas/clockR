@@ -87,7 +87,10 @@ def fCommands():
 
       elif (bMusicPlay == 1):
         pygame.mixer.music.pause()
-        bMusicPlay = 0
+        bMusicPlay = 2
+      elif (bMusicPlay == 2):
+        pygame.mixer.music.unpause()
+        bMusicPlay = 1
 
   # => mode 2: wifi
   elif (nMode == 2):
@@ -129,7 +132,7 @@ def fDisplay():
 
 
 def main():
-  global bIsWifiActivated, bMusicPlay, nDisplay, nButton, nMode, x, iBrightness, tm
+  global nButton, x, iBrightness, tm
 
   # set the buttons
   GPIO.setmode(GPIO.BCM)
@@ -162,8 +165,7 @@ def main():
       print("input_str = {}".format(input_str))
 
       if (input_str == "q"):
-        print("Exiting serial terminal.")
-        break
+        bContinue = False
 
       # Insert your code here to do whatever you want with the input_str.
       if (input_str == "1"):
