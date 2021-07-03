@@ -80,15 +80,13 @@ def fCommands():
     # button 2: play/stop
     if (nButton == 2):
       if (bMusicPlay == 0):
-        #p = subprocess.Popen(["music123","11.mp3"])
         pygame.mixer.music.load("11.mp3")
-        pygame.mixer.music.set_volume(1.0)
+        pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play()
-
         bMusicPlay = 1
+
       elif (bMusicPlay == 1):
-        #p = subprocess.Popen(["sudo","pkill","music123"])
-        pygame.mixer.pause()
+        pygame.mixer.music.pause()
         bMusicPlay = 0
 
   # => mode 2: wifi
@@ -139,7 +137,6 @@ def main():
   GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
   GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-  EXIT_COMMAND = "exit"
   inputQueue = queue.Queue()
   inputThread = threading.Thread(target=read_kbd_input, args=(inputQueue,), daemon=True)
   inputThread.start()
@@ -164,7 +161,7 @@ def main():
       input_str = inputQueue.get()
       print("input_str = {}".format(input_str))
 
-      if (input_str == EXIT_COMMAND):
+      if (input_str == "q"):
         print("Exiting serial terminal.")
         break
 
