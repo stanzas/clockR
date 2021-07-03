@@ -12,6 +12,18 @@ import time
 
 tm = tm1637.TM1637(clk=5, dio=4)
 pygame.mixer.init()
+now = datetime.now()
+BTN_ONE = 17
+BTN_TWO = 27
+BTN_THREE = 22
+iBrightness = 7
+bIsWifiActivated = 1
+bMusicPlay = 0
+nDisplay = 1
+nButton = 0
+nMode = 0
+x = 0
+iBrightness = 0
 
 # Button 1 => display time
 def button1(channel):
@@ -121,17 +133,6 @@ def fDisplay():
 def main():
   global bIsWifiActivated, bMusicPlay, nDisplay, nButton, nMode, x, iBrightness, tm
 
-  BTN_ONE = 17
-  BTN_TWO = 27
-  BTN_THREE = 22
-  iBrightness = 7
-
-  # set the 7-segments display
-  tm.brightness(iBrightness)
-
-  # Get current time
-  now = datetime.now()
-
   # set the buttons
   GPIO.setmode(GPIO.BCM)
   GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -150,13 +151,6 @@ def main():
   GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
 
   # Initialization
-  bIsWifiActivated = 1
-  bMusicPlay = 0
-  nDisplay = 1
-  nButton = 0
-  nMode = 0
-  x = 0
-  iBrightness = 0
   tm.brightness(iBrightness)
   print("=== starting ===")
 
