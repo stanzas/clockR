@@ -92,7 +92,7 @@ def fCommands():
 
 
 def fDisplay():
-  global nDisplay, x, bMusicPlay, bIsWifiActivated
+  global nDisplay, x, bMusicPlay, bIsWifiActivated, tm
   # display time
   if (nDisplay == 0):
     if (x!=1):
