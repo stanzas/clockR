@@ -6,26 +6,9 @@ from datetime import datetime
 import tm1637
 import subprocess
 import pygame
-
-BTN_ONE = 17
-BTN_TWO = 27
-BTN_THREE = 22
-iBrightness = 7
-
-pygame.mixer.init()
-
-# set the 7-segments display
-tm = tm1637.TM1637(clk=5, dio=4)
-tm.brightness(iBrightness)
-
-# Get current time
-now = datetime.now()
-
-# set the buttons
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+import threading
+import queue
+import time
 
 # Button 1 => display time
 def button1(channel):
@@ -45,6 +28,11 @@ def button3(channel):
   print("button3 pressed")
   nButton = 3
 
+def read_kbd_input(inputQueue):
+  print('Ready for keyboard input:')
+  while (True):
+    input_str = input()
+    inputQueue.put(input_str)
 
 def fCommands():
   global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness
@@ -127,30 +115,81 @@ def fDisplay():
       tm.show("WON-")
 
 
-# when a falling edge is detected on port 17, regardless of whatever
-# else is happening in the program, the function my_callback will be run
-GPIO.add_event_detect(BTN_ONE, GPIO.FALLING, callback=button1, bouncetime=300)
-GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
-GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
+def main():
+  BTN_ONE = 17
+  BTN_TWO = 27
+  BTN_THREE = 22
+  iBrightness = 7
 
-bIsWifiActivated = 1
-bMusicPlay = 0
-nDisplay = 1
-nButton = 0
-nMode = 0
-x = 0
-iBrightness = 0
-tm.brightness(iBrightness)
-print("=== starting ===")
-while True:
-  fCommands()
-  fDisplay()
-  time.sleep(1)
+  pygame.mixer.init()
 
-print("=== ending ===")
+  # set the 7-segments display
+  tm = tm1637.TM1637(clk=5, dio=4)
+  tm.brightness(iBrightness)
 
-GPIO.cleanup()
-sys.exit()
+  # Get current time
+  now = datetime.now()
+
+  # set the buttons
+  GPIO.setmode(GPIO.BCM)
+  GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+  GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+  GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+  EXIT_COMMAND = "exit"
+  inputQueue = queue.Queue()
+  inputThread = threading.Thread(target=read_kbd_input, args=(inputQueue,), daemon=True)
+  inputThread.start()
+
+  # when a falling edge is detected on port 17, regardless of whatever
+  # else is happening in the program, the function my_callback will be run
+  GPIO.add_event_detect(BTN_ONE, GPIO.FALLING, callback=button1, bouncetime=300)
+  GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
+  GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
+
+  # Initialization
+  bIsWifiActivated = 1
+  bMusicPlay = 0
+  nDisplay = 1
+  nButton = 0
+  nMode = 0
+  x = 0
+  iBrightness = 0
+  tm.brightness(iBrightness)
+  print("=== starting ===")
+
+  bContinue = True
+  while (bContinue):
+
+    fCommands()
+    fDisplay()
+
+    if (inputQueue.qsize() > 0):
+      input_str = inputQueue.get()
+      print("input_str = {}".format(input_str))
+
+      if (input_str == EXIT_COMMAND):
+        print("Exiting serial terminal.")
+        break
+
+      # Insert your code here to do whatever you want with the input_str.
+      if (input_str == "1"):
+        nButton = 1
+      elif (input_str == "2"):
+        nButton = 2
+      elif (input_str == "3"):
+        nButton = 3
+
+      # The rest of your program goes here.
+
+      time.sleep(0.01)
+
+  GPIO.cleanup()
+  sys.exit()
+  print("=== ending ===")
+
+if (__name__ == '__main__'):
+  main()
 
 #------------------------------------
 # all LEDS on "88:88"
