@@ -116,6 +116,8 @@ def fDisplay():
 
 
 def main():
+  global bIsWifiActivated, bMusicPlay, nDisplay, nButton, nMode, x, iBrightness
+
   BTN_ONE = 17
   BTN_TWO = 27
   BTN_THREE = 22
