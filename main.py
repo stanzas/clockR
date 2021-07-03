@@ -22,6 +22,7 @@ bMusicPlay = 0
 nDisplay = 1
 nButton = 0
 nMode = 0
+nVolume = 0.2
 x = 0
 iBrightness = 0
 
@@ -50,7 +51,7 @@ def read_kbd_input(inputQueue):
     inputQueue.put(input_str)
 
 def fCommands():
-  global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness
+  global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness, nVolume
 
   # Button 1: toggle functions
   if (nButton == 1):
@@ -81,7 +82,7 @@ def fCommands():
     if (nButton == 2):
       if (bMusicPlay == 0):
         pygame.mixer.music.load("11.mp3")
-        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.set_volume(nVolume)
         pygame.mixer.music.play()
         bMusicPlay = 1
 
@@ -132,7 +133,7 @@ def fDisplay():
 
 
 def main():
-  global nButton, x, iBrightness, tm
+  global nButton, x, iBrightness, tm, nVolume
 
   # set the buttons
   GPIO.setmode(GPIO.BCM)
@@ -174,6 +175,12 @@ def main():
         nButton = 2
       elif (input_str == "3"):
         nButton = 3
+      elif (input_str == "+"):
+        if (nVolume < 1):
+          nVolume = nVolume + 0.1
+      elif (input_str == "-"):
+        if (nVolume > 0):
+          nVolume = nVolume - 0.1
 
       # The rest of your program goes here.
 
