@@ -70,7 +70,7 @@ def fCommands():
       iBrightness = iBrightness + 1
     tm.brightness(iBrightness)
 
-  if (nVolume != nVolume_prev)
+  if (nVolume != nVolume_prev):
     pygame.mixer.music.set_volume(nVolume)
     nVolume_prev = nVolume
 
