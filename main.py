@@ -23,6 +23,7 @@ nDisplay = 1
 nButton = 0
 nMode = 0
 nVolume = 0.2
+nVolume_prev = nVolume
 x = 0
 iBrightness = 0
 
@@ -51,7 +52,7 @@ def read_kbd_input(inputQueue):
     inputQueue.put(input_str)
 
 def fCommands():
-  global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness, nVolume
+  global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness, nVolume, nVolume_prev
 
   # Button 1: toggle functions
   if (nButton == 1):
@@ -69,6 +70,9 @@ def fCommands():
       iBrightness = iBrightness + 1
     tm.brightness(iBrightness)
 
+  if (nVolume != nVolume_prev)
+    pygame.mixer.music.set_volume(nVolume)
+    nVolume_prev = nVolume
 
   # => mode 0: time
   if (nMode == 0):
