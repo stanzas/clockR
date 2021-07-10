@@ -168,7 +168,7 @@ def fCommands():
 
 
 def main():
-  global x, iBrightness, tm, inputQueue
+  global x, iBrightness, tm, inputQueue, bContinue
 
   # set the buttons
   GPIO.setmode(GPIO.BCM)
