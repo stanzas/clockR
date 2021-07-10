@@ -17,7 +17,7 @@ class cAlarm(NamedTuple):
   minute: int
   song: str
 
-oAlarm = cAlarm(0, 33, "")
+oAlarm = cAlarm(0, 38, "")
 
 tm = tm1637.TM1637(clk=5, dio=4)
 pygame.mixer.init()
