@@ -61,7 +61,7 @@ def read_kbd_input(inputQueue):
     inputQueue.put(input_str)
 
 def fActions():
-  global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness, nVolume, nVolume_prev
+  global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness, nVolume, nVolume_prev, oAlarm
 
   # nMode
   # 0: time
