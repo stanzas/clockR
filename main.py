@@ -146,7 +146,7 @@ def fDisplay():
 
 
 def fCommands():
-  global bContinue, nButton, nVolume, inputQueue
+  global bContinue, nButton, nVolume, inputQueue, oAlarm
 
   if (inputQueue.qsize() > 0):
     input_str = inputQueue.get()
@@ -166,6 +166,10 @@ def fCommands():
     elif (input_str == "-"):
       if (nVolume > 0):
         nVolume = nVolume - 0.1
+    elif (input_str == "t"):
+      print("time: ", now.hour, ":", now.minute)
+      print("alarm: ", oAlarm.hour, ":", oAlarm.minute)
+
     else:
       print("Unknown command. Comands are:")
       print("- 'q' => exit ;")
@@ -174,8 +178,10 @@ def fCommands():
       print("- '3' => button 3")
       print("- '+' => vol +10%")
       print("- '-' => vol -10%")
+      print("- 't' => show time")
 
 def fAlarm():
+  global oAlarm
   # if alarm time reached => play the sound
   # now.hour, now.minute
   if ((now.hour == oAlarm.hour) & (now.minute == oAlarm.minute)):
