@@ -9,6 +9,15 @@ import pygame
 import threading
 import queue
 import time
+from typing import NamedTuple
+
+
+class cAlarm(NamedTuple):
+  hour: int
+  minute: int
+  song: str
+
+oAlarm = cAlarm(0, 32, "")
 
 tm = tm1637.TM1637(clk=5, dio=4)
 pygame.mixer.init()
@@ -166,6 +175,12 @@ def fCommands():
       print("- '+' => vol +10%")
       print("- '-' => vol -10%")
 
+def fAlarm():
+  # if alarm time reached => play the sound
+  # now.hour, now.minute
+  if ((now.hour == oAlarm.hour) && (now.minute == oAlarm.minute)):
+    print("Time to wakeup")
+
 
 def main():
   global x, iBrightness, tm, inputQueue, bContinue
@@ -194,6 +209,7 @@ def main():
   while (bContinue):
 
     fActions()
+    fAlarm()
     fDisplay()
     fCommands()
 
