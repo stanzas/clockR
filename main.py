@@ -51,7 +51,7 @@ def read_kbd_input(inputQueue):
     input_str = input()
     inputQueue.put(input_str)
 
-def fCommands():
+def fActions():
   global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness, nVolume, nVolume_prev
 
   # Button 1: toggle functions
@@ -136,8 +136,39 @@ def fDisplay():
       tm.show("WON-")
 
 
+def fCommands():
+  global bContinue, nButton, nVolume
+
+  if (inputQueue.qsize() > 0):
+    input_str = inputQueue.get()
+    print("input_str = {}".format(input_str))
+
+    if (input_str == "q"):
+      bContinue = False
+    elif (input_str == "1"):
+      nButton = 1
+    elif (input_str == "2"):
+      nButton = 2
+    elif (input_str == "3"):
+      nButton = 3
+    elif (input_str == "+"):
+      if (nVolume < 1):
+        nVolume = nVolume + 0.1
+    elif (input_str == "-"):
+      if (nVolume > 0):
+        nVolume = nVolume - 0.1
+    else:
+      print("Unknown command. Comands are:")
+      print("- 'q' => exit ;")
+      print("- '1' => button 1")
+      print("- '2' => button 2")
+      print("- '3' => button 3")
+      print("- '+' => vol +10%")
+      print("- '-' => vol -10%")
+
+
 def main():
-  global nButton, x, iBrightness, tm, nVolume
+  global x, iBrightness, tm
 
   # set the buttons
   GPIO.setmode(GPIO.BCM)
@@ -162,33 +193,11 @@ def main():
   bContinue = True
   while (bContinue):
 
-    fCommands()
+    fActions()
     fDisplay()
+    fCommands()
 
-    if (inputQueue.qsize() > 0):
-      input_str = inputQueue.get()
-      print("input_str = {}".format(input_str))
-
-      if (input_str == "q"):
-        bContinue = False
-
-      # Insert your code here to do whatever you want with the input_str.
-      if (input_str == "1"):
-        nButton = 1
-      elif (input_str == "2"):
-        nButton = 2
-      elif (input_str == "3"):
-        nButton = 3
-      elif (input_str == "+"):
-        if (nVolume < 1):
-          nVolume = nVolume + 0.1
-      elif (input_str == "-"):
-        if (nVolume > 0):
-          nVolume = nVolume - 0.1
-
-      # The rest of your program goes here.
-
-      time.sleep(0.01)
+    time.sleep(0.01)
 
   GPIO.cleanup()
   sys.exit()
