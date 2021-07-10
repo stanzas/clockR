@@ -149,7 +149,7 @@ def fActions():
         oAlarm.hour = oAlarm.hour + 1
       else:
         oAlarm.hour = 0
-      print oAlarm
+      print(oAlarm.hour)
 
     # Button 4: button '-'
     elif (nButton == 5):
@@ -157,7 +157,7 @@ def fActions():
         oAlarm.hour = oAlarm.hour - 1
       else:
         oAlarm.hour = 60
-      print oAlarm
+      print(oAlarm.hour)
 
 
 
@@ -169,7 +169,7 @@ def fActions():
         oAlarm.minute = oAlarm.minute + 1
       else:
         oAlarm.minute = 0
-      print oAlarm
+      print(oAlarm.minute)
 
     # Button 4: button '-'
     elif (nButton == 5):
@@ -177,7 +177,7 @@ def fActions():
         oAlarm.minute = oAlarm.minute - 1
       else:
         oAlarm.minute = 60
-      print oAlarm
+      print(oAlarm.minute)
 
 
   nButton = 0
