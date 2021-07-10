@@ -146,7 +146,7 @@ def fDisplay():
 
 
 def fCommands():
-  global bContinue, nButton, nVolume, inputQueue, oAlarm
+  global bContinue, nButton, nVolume, inputQueue, oAlarm, now
 
   if (inputQueue.qsize() > 0):
     input_str = inputQueue.get()
