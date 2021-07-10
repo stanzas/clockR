@@ -17,7 +17,7 @@ class cAlarm(NamedTuple):
   minute: int
   song: str
 
-oAlarm = cAlarm(0, 38, "")
+oAlarm = cAlarm(0, 43, "")
 
 tm = tm1637.TM1637(clk=5, dio=4)
 pygame.mixer.init()
@@ -63,12 +63,21 @@ def read_kbd_input(inputQueue):
 def fActions():
   global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness, nVolume, nVolume_prev
 
+  # nMode
+  # 0: time
+  # 1: music
+  # 2: wifi
+  # 3: set alarm hours
+  # 4: set alarm minutes
+
   # Button 1: toggle functions
   if (nButton == 1):
-    if (nMode >= 2):
+    if (nMode >= 3):
       nMode = 0
     else:
       nMode = nMode + 1
+
+    print("nMode: ", nMode)
 
   # Button 3: toggle brightness
   elif (nButton == 3):
@@ -79,9 +88,6 @@ def fActions():
       iBrightness = iBrightness + 1
     tm.brightness(iBrightness)
 
-  if (nVolume != nVolume_prev):
-    pygame.mixer.music.set_volume(nVolume)
-    nVolume_prev = nVolume
 
   # => mode 0: time
   if (nMode == 0):
@@ -106,6 +112,22 @@ def fActions():
         pygame.mixer.music.unpause()
         bMusicPlay = 1
 
+    # button 3: button +
+    elif (nButton == 4):
+      if (nVolume < 1):
+        nVolume = nVolume + 0.1
+
+    # button 3: button -
+    elif (nButton == 5):
+      if (nVolume > 0):
+        nVolume = nVolume - 0.1
+
+    if (nVolume != nVolume_prev):
+      pygame.mixer.music.set_volume(nVolume)
+      nVolume_prev = nVolume
+
+
+
   # => mode 2: wifi
   elif (nMode == 2):
     nDisplay = 2
@@ -117,6 +139,46 @@ def fActions():
       else:
         subprocess.call(["sudo","ifconfig","wlan0","up"])
         bIsWifiActivated = 1
+
+
+  # => mode 3: change alarm hours
+  elif (nMode == 3):
+    # Button 3: button '+'
+    if (nButton == 4):
+      if (oAlarm.hour < 60):
+        oAlarm.hour = oAlarm.hour + 1
+      else:
+        oAlarm.hour = 0
+      print oAlarm.hour
+
+    # Button 4: button '-'
+    elif (nButton == 5):
+      if (oAlarm.hour > 0):
+        oAlarm.hour = oAlarm.hour - 1
+      else:
+        oAlarm.hour = 60
+      print oAlarm.hour
+
+
+
+  # => mode 4: change alarm minutes
+  elif (nMode == 4):
+    # Button 3: button '+'
+    if (nButton == 4):
+      if (oAlarm.minute < 60):
+        oAlarm.minute = oAlarm.minute + 1
+      else:
+        oAlarm.minute = 0
+      print oAlarm.minute
+
+    # Button 4: button '-'
+    elif (nButton == 5):
+      if (oAlarm.minute > 0):
+        oAlarm.minute = oAlarm.minute - 1
+      else:
+        oAlarm.minute = 60
+      print oAlarm.minute
+
 
   nButton = 0
 
@@ -161,11 +223,10 @@ def fCommands():
     elif (input_str == "3"):
       nButton = 3
     elif (input_str == "+"):
-      if (nVolume < 1):
-        nVolume = nVolume + 0.1
+      nButton = 4
     elif (input_str == "-"):
-      if (nVolume > 0):
-        nVolume = nVolume - 0.1
+      nButton = 5
+
     elif (input_str == "t"):
       print("time: ", now.hour, ":", now.minute)
       print("alarm: ", oAlarm.hour, ":", oAlarm.minute)
