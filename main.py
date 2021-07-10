@@ -17,7 +17,7 @@ class cAlarm(NamedTuple):
   minute: int
   song: str
 
-oAlarm = cAlarm(0, 32, "")
+oAlarm = cAlarm(0, 33, "")
 
 tm = tm1637.TM1637(clk=5, dio=4)
 pygame.mixer.init()
@@ -178,7 +178,7 @@ def fCommands():
 def fAlarm():
   # if alarm time reached => play the sound
   # now.hour, now.minute
-  if ((now.hour == oAlarm.hour) && (now.minute == oAlarm.minute)):
+  if ((now.hour == oAlarm.hour) & (now.minute == oAlarm.minute)):
     print("Time to wakeup")
 
 
