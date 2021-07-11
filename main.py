@@ -269,13 +269,13 @@ def fAlarm():
       bMusicPlay = 1
 
   # reset alarm for next day
-  if (bRunForToday == True):
+  if (oAlarm.bRunForToday == True):
     # Alarm = Last minute of the hour, need to compare with next hour
     if ((oAlarm.minute == 59) and (now.hour > oAlarm.hour)):
-      bRunForToday = False
+      oAlarm.bRunForToday = False
 
     elif ((now.hour == oAlarm.hour) and (now.minute >= oAlarm.minute)):
-      bRunForToday = False
+      oAlarm.bRunForToday = False
 
 
 def main():
