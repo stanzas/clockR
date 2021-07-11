@@ -19,6 +19,7 @@ oAlarm = cAlarm()
 oAlarm.hour = 23
 oAlarm.minute = 10
 oAlarm.music = ""
+oAlarm.bRunForToday = False
 
 tm = tm1637.TM1637(clk=5, dio=4)
 pygame.mixer.init()
