@@ -229,7 +229,7 @@ def fCommands():
       nButton = 5
 
     elif (input_str == "t"):
-      print("time: ", now.hour, ":", now.minute)
+      print("time: ", now.hour, ":", now.minute, ":", now.second)
       print("alarm: ", oAlarm.hour, ":", oAlarm.minute)
 
     else:
