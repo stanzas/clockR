@@ -16,7 +16,7 @@ class cAlarm:
   pass
 
 oAlarm = cAlarm()
-oAlarm.hour = 10
+oAlarm.hour = 22
 oAlarm.minute = 50
 oAlarm.music = ""
 
@@ -148,17 +148,17 @@ def fActions():
     # Button 3: button '+'
     if (nButton == 4):
       if (oAlarm.hour < 60):
-        oAlarm._replace(hour = oAlarm.hour + 1)
+        oAlarm.hour = oAlarm.hour + 1
       else:
-        oAlarm._replace(hour = 0)
+        oAlarm.hour = 0
       print(oAlarm.hour)
 
     # Button 4: button '-'
     elif (nButton == 5):
       if (oAlarm.hour > 0):
-        oAlarm._replace(hour = oAlarm.hour - 1)
+        oAlarm.hour = oAlarm.hour - 1
       else:
-        oAlarm._replace(hour = 60)
+        oAlarm.hour = 60
       print(oAlarm.hour)
 
 
@@ -168,17 +168,17 @@ def fActions():
     # Button 3: button '+'
     if (nButton == 4):
       if (oAlarm.minute < 60):
-        oAlarm._replace(minute = oAlarm.minute + 1)
+        oAlarm.minute = oAlarm.minute + 1
       else:
-        oAlarm._replace(minute = 0)
+        oAlarm.minute = 0
       print(oAlarm.minute)
 
     # Button 4: button '-'
     elif (nButton == 5):
       if (oAlarm.minute > 0):
-        oAlarm._replace(minute = oAlarm.minute - 1)
+        oAlarm.minute = oAlarm.minute - 1
       else:
-        oAlarm._replace(minute = 60)
+        oAlarm.minute = 60
       print(oAlarm.minute)
 
 
