@@ -73,7 +73,7 @@ def fActions():
 
   # Button 1: toggle functions
   if (nButton == 1):
-    if (nMode >= 3):
+    if (nMode >= 5):
       nMode = 0
     else:
       nMode = nMode + 1
@@ -210,7 +210,7 @@ def fDisplay():
 
 
 def fCommands():
-  global bContinue, nButton, nVolume, inputQueue, oAlarm, now
+  global bContinue, nButton, nVolume, inputQueue, oAlarm, now, nMode
 
   if (inputQueue.qsize() > 0):
     input_str = inputQueue.get()
@@ -229,7 +229,10 @@ def fCommands():
     elif (input_str == "-"):
       nButton = 5
 
-    elif (input_str == "t"):
+    elif (input_str == "pmode"):
+      print("mode: ", nMode)
+
+    elif (input_str == "ptime"):
       print("time: ", now.hour, ":", now.minute, ":", now.second)
       print("alarm: ", oAlarm.hour, ":", oAlarm.minute)
 
