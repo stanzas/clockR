@@ -250,7 +250,7 @@ def fAlarm():
   global oAlarm, now, bMusicPlay
   # if alarm time reached => play the sound
   # now.hour, now.minute
-  if ((now.hour == oAlarm.hour) and (now.minute == oAlarm.minute) and (bRunForToday = False)):
+  if ((now.hour == oAlarm.hour) and (now.minute == oAlarm.minute) and (bRunForToday == False)):
     oAlarm.bRunForToday = True
     print("Time to wakeup")
 
