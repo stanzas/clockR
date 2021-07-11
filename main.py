@@ -133,6 +133,7 @@ def fActions():
     nDisplay = 2
 
     if (nButton == 2):
+
       if (bIsWifiActivated == 1):
         subprocess.call(["sudo","ifconfig","wlan0","down"])
         bIsWifiActivated = 0
@@ -184,7 +185,7 @@ def fActions():
 
 
 def fDisplay():
-  global nDisplay, x, bMusicPlay, bIsWifiActivated, tm
+  global nDisplay, x, bMusicPlay, bIsWifiActivated, tm, now
   # display time
   if (nDisplay == 0):
     if (x!=1):
@@ -250,7 +251,7 @@ def fAlarm():
 
 
 def main():
-  global x, iBrightness, tm, inputQueue, bContinue
+  global x, iBrightness, tm, inputQueue, bContinue, now
 
   # set the buttons
   GPIO.setmode(GPIO.BCM)
@@ -280,6 +281,7 @@ def main():
     fDisplay()
     fCommands()
 
+    now = datetime.now()
     time.sleep(0.01)
 
   GPIO.cleanup()
