@@ -15,6 +15,7 @@ from typing import NamedTuple
 class cAlarm:
   pass
 
+oAlarm = cAlarm()
 oAlarm.hour = 10
 oAlarm.minute = 50
 oAlarm.music = ""
