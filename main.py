@@ -63,7 +63,9 @@ def read_kbd_input(inputQueue):
     inputQueue.put(input_str)
 
 def fActions():
-  global nButton, nDisplay, bIsWifiActivated, bMusicPlay, nMode, iBrightness, nVolume, nVolume_prev, oAlarm
+  global nButton, nDisplay, bIsWifiActivated,
+         bMusicPlay, nMode, iBrightness, nVolume,
+         nVolume_prev, oAlarm
 
   # nMode
   # 0: time
@@ -251,7 +253,9 @@ def fAlarm():
   global oAlarm, now, bMusicPlay
   # if alarm time reached => play the sound
   # now.hour, now.minute
-  if ((now.hour == oAlarm.hour) and (now.minute == oAlarm.minute) and (bRunForToday == False)):
+  if ((now.hour == oAlarm.hour) and
+      (now.minute == oAlarm.minute) and
+      (oAlarm.bRunForToday == False)):
     oAlarm.bRunForToday = True
     print("Time to wakeup")
 
