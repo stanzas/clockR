@@ -16,8 +16,8 @@ class cAlarm:
   pass
 
 oAlarm = cAlarm()
-oAlarm.hour = 22
-oAlarm.minute = 50
+oAlarm.hour = 23
+oAlarm.minute = 10
 oAlarm.music = ""
 
 tm = tm1637.TM1637(clk=5, dio=4)
@@ -247,11 +247,31 @@ def fCommands():
       print("- 't' => show time")
 
 def fAlarm():
-  global oAlarm
+  global oAlarm, now, bMusicPlay
   # if alarm time reached => play the sound
   # now.hour, now.minute
-  if ((now.hour == oAlarm.hour) & (now.minute == oAlarm.minute)):
+  if ((now.hour == oAlarm.hour) and (now.minute == oAlarm.minute) and (bRunForToday = False)):
+    oAlarm.bRunForToday = True
     print("Time to wakeup")
+
+    # music is stopped or paused
+    if (bMusicPlay == 0):
+      pygame.mixer.music.load("11.mp3")
+      pygame.mixer.music.set_volume(nVolume)
+      pygame.mixer.music.play()
+      bMusicPlay = 1
+    elif (bMusicPlay == 2):
+      pygame.mixer.music.unpause()
+      bMusicPlay = 1
+
+  # reset alarm for next day
+  if (bRunForToday == True):
+    # Alarm = Last minute of the hour, need to compare with next hour
+    if ((oAlarm.minute == 59) and (now.hour > oAlarm.hour)):
+      bRunForToday = False
+
+    elif ((now.hour == oAlarm.hour) and (now.minute >= oAlarm.minute)):
+      bRunForToday = False
 
 
 def main():
