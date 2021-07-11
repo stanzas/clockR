@@ -12,12 +12,12 @@ import time
 from typing import NamedTuple
 
 
-class cAlarm(NamedTuple):
-  hour: int
-  minute: int
-  song: str
+class cAlarm:
+  pass
 
-oAlarm = cAlarm(0, 43, "")
+oAlarm.hour = 10
+oAlarm.minute = 50
+oAlarm.music = ""
 
 tm = tm1637.TM1637(clk=5, dio=4)
 pygame.mixer.init()
