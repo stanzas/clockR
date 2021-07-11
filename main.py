@@ -255,8 +255,9 @@ def fAlarm():
   if ((now.hour == oAlarm.hour) and
       (now.minute == oAlarm.minute) and
       (oAlarm.bRunForToday == False)):
+
     oAlarm.bRunForToday = True
-    print("Time to wakeup")
+    print("Time to wakeup!")
 
     # music is stopped or paused
     if (bMusicPlay == 0):
@@ -274,7 +275,7 @@ def fAlarm():
     if ((oAlarm.minute == 59) and (now.hour > oAlarm.hour)):
       oAlarm.bRunForToday = False
 
-    elif ((now.hour == oAlarm.hour) and (now.minute >= oAlarm.minute)):
+    elif ((now.hour == oAlarm.hour) and (now.minute > oAlarm.minute)):
       oAlarm.bRunForToday = False
 
 
