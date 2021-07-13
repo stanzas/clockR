@@ -162,37 +162,37 @@ def fActions():
   elif (nMode == 3):
     # Button 3: button '+'
     if (nButton == 4):
-      if (oAlarm.hour < 60):
+      if (oAlarm.hour < 23):
         oAlarm.hour = oAlarm.hour + 1
       else:
         oAlarm.hour = 0
-      print(oAlarm.hour)
+      print(oAlarm.hour, ":", oAlarm.minute)
 
     # Button 4: button '-'
     elif (nButton == 5):
       if (oAlarm.hour > 0):
         oAlarm.hour = oAlarm.hour - 1
       else:
-        oAlarm.hour = 60
-      print(oAlarm.hour)
+        oAlarm.hour = 23
+      print(oAlarm.hour, ":", oAlarm.minute)
 
   # => mode 4: change alarm minutes
   elif (nMode == 4):
     # Button 4: button '+'
     if (nButton == 4):
-      if (oAlarm.minute < 60):
+      if (oAlarm.minute < 59):
         oAlarm.minute = oAlarm.minute + 1
       else:
         oAlarm.minute = 0
-      print(oAlarm.minute)
+      print(oAlarm.hour, ":", oAlarm.minute)
 
     # Button 5: button '-'
     elif (nButton == 5):
       if (oAlarm.minute > 0):
         oAlarm.minute = oAlarm.minute - 1
       else:
-        oAlarm.minute = 60
-      print(oAlarm.minute)
+        oAlarm.minute = 59
+      print(oAlarm.hour, ":", oAlarm.minute)
 
   # reset button pressed
   nButton = 0
