@@ -15,11 +15,29 @@ from typing import NamedTuple
 class cAlarm:
   pass
 
+class cDisplay:
+  pass
+
+class cMusic:
+  pass
+
 oAlarm = cAlarm()
 oAlarm.hour = 23
 oAlarm.minute = 10
-oAlarm.music = ""
+oAlarm.music_filename = "11.mp3"
 oAlarm.bRunForToday = False
+oAlarm.isOn = False
+
+oDisplay = cDisplay()
+oDisplay.second = 0
+oDisplay.panel = 1
+oDisplay.iBrightness = 0
+
+oMusic = cMusic()
+oMusic.bMusicPlay = 0
+oMusic.nVolume = 0.2
+oMusic.nVolume_prev = oMusic.nVolume
+
 
 tm = tm1637.TM1637(clk=5, dio=4)
 pygame.mixer.init()
@@ -27,16 +45,10 @@ now = datetime.now()
 BTN_ONE = 17
 BTN_TWO = 27
 BTN_THREE = 22
-iBrightness = 7
 bIsWifiActivated = 1
-bMusicPlay = 0
-nDisplay = 1
 nButton = 0
 nMode = 0
-nVolume = 0.2
-nVolume_prev = nVolume
 x = 0
-iBrightness = 0
 
 # Button 1 => display time
 def button1(channel):
@@ -63,8 +75,7 @@ def read_kbd_input(inputQueue):
     inputQueue.put(input_str)
 
 def fActions():
-  global nButton, nDisplay, bIsWifiActivated, bMusicPlay
-  global nMode, iBrightness, nVolume, nVolume_prev, oAlarm
+  global nMode, nButton, bIsWifiActivated, oMusic, oDisplay, oAlarm
 
   # nMode
   # 0: time
@@ -84,56 +95,59 @@ def fActions():
 
   # Button 3: toggle brightness
   elif (nButton == 3):
-    print("button3 pressed - ", iBrightness)
-    if (iBrightness >= 7):
-      iBrightness = 0
+    print("button3 pressed - ", oDisplay.iBrightness)
+    if (oDisplay.iBrightness >= 7):
+      oDisplay.iBrightness = 0
     else:
-      iBrightness = iBrightness + 1
-    tm.brightness(iBrightness)
+      oDisplay.iBrightness = oDisplay.iBrightness + 1
+    tm.brightness(oDisplay.iBrightness)
 
 
   # => mode 0: time
   if (nMode == 0):
-    nDisplay = 0
+    oDisplay.panel = 0
 
   # => mode 1: mp3
   elif (nMode == 1):
-    nDisplay = 1
+    oDisplay.panel = 1
 
     # button 2: play/stop
     if (nButton == 2):
-      if (bMusicPlay == 0):
-        pygame.mixer.music.load("11.mp3")
-        pygame.mixer.music.set_volume(nVolume)
+      if (oMusic.bMusicPlay == 0):
+        pygame.mixer.music.load(oAlarm.music_filename)
+        pygame.mixer.music.set_volume(oMusic.nVolume)
         pygame.mixer.music.play()
-        bMusicPlay = 1
+        oMusic.bMusicPlay = 1
 
-      elif (bMusicPlay == 1):
+      elif (oMusic.bMusicPlay == 1):
         pygame.mixer.music.pause()
-        bMusicPlay = 2
-      elif (bMusicPlay == 2):
+        oMusic.bMusicPlay = 2
+      elif (oMusic.bMusicPlay == 2):
         pygame.mixer.music.unpause()
-        bMusicPlay = 1
+        oMusic.bMusicPlay = 1
 
-    # button 3: button +
+    # button 3: next or stop?
+    elif (nButton == 3):
+      pygame.mixer.music.stop()
+      oMusic.bMusicPlay = 0
+
+    # button 4: button +
     elif (nButton == 4):
-      if (nVolume < 1):
-        nVolume = nVolume + 0.1
+      if (oMusic.nVolume < 1):
+        oMusic.nVolume = oMusic.nVolume + 0.1
 
-    # button 3: button -
+    # button 5: button -
     elif (nButton == 5):
-      if (nVolume > 0):
-        nVolume = nVolume - 0.1
+      if (oMusic.nVolume > 0):
+        oMusic.nVolume = oMusic.nVolume - 0.1
 
-    if (nVolume != nVolume_prev):
-      pygame.mixer.music.set_volume(nVolume)
-      nVolume_prev = nVolume
-
-
+    if (oMusic.nVolume != oMusic.nVolume_prev):
+      pygame.mixer.music.set_volume(oMusic.nVolume)
+      oMusic.nVolume_prev = oMusic.nVolume
 
   # => mode 2: wifi
   elif (nMode == 2):
-    nDisplay = 2
+    oDisplay.panel = 2
 
     if (nButton == 2):
 
@@ -143,7 +157,6 @@ def fActions():
       else:
         subprocess.call(["sudo","ifconfig","wlan0","up"])
         bIsWifiActivated = 1
-
 
   # => mode 3: change alarm hours
   elif (nMode == 3):
@@ -163,11 +176,9 @@ def fActions():
         oAlarm.hour = 60
       print(oAlarm.hour)
 
-
-
   # => mode 4: change alarm minutes
   elif (nMode == 4):
-    # Button 3: button '+'
+    # Button 4: button '+'
     if (nButton == 4):
       if (oAlarm.minute < 60):
         oAlarm.minute = oAlarm.minute + 1
@@ -175,7 +186,7 @@ def fActions():
         oAlarm.minute = 0
       print(oAlarm.minute)
 
-    # Button 4: button '-'
+    # Button 5: button '-'
     elif (nButton == 5):
       if (oAlarm.minute > 0):
         oAlarm.minute = oAlarm.minute - 1
@@ -183,36 +194,45 @@ def fActions():
         oAlarm.minute = 60
       print(oAlarm.minute)
 
-
+  # reset button pressed
   nButton = 0
 
 
 def fDisplay():
-  global nDisplay, x, bMusicPlay, bIsWifiActivated, tm, now
-  # display time
-  if (nDisplay == 0):
-    if (x!=1):
-      tm.numbers(now.hour, now.minute)
-      x = 1
-    else:
-      tm.show(now.strftime("%H%M"))
-      x = 0
+  global x, bIsWifiActivated, tm, now, oAlarm, oDisplay, oMusic
 
-  elif (nDisplay == 1):
-    if (bMusicPlay == 0):
+  # display current time (compare seconds to blink the ":")
+  if (oDisplay.panel == 0):
+    if (now.second != oDisplay.second):
+      oDisplay.second = now.second
+      if (x != 1):
+        tm.numbers(now.hour, now.minute)
+        x = 1
+      else:
+        tm.show(now.strftime("%H%M"))
+        x = 0
+
+  # display mp3 play/stop
+  elif (oDisplay.panel == 1):
+    if (oMusic.bMusicPlay == 0):
       tm.show("play")
     else:
       tm.show("stop")
 
-  elif (nDisplay == 2):
+  # display Wifi state
+  elif (oDisplay.panel == 2):
     if (bIsWifiActivated == 0):
       tm.show("WOFF")
     else:
       tm.show("WON-")
 
+  # display Alarm time set
+  elif (oDisplay.panel == 3):
+    tm.numbers(oAlarm.hour, oAlarm.minute)
+
 
 def fCommands():
-  global bContinue, nButton, nVolume, inputQueue, oAlarm, now, nMode
+  global bContinue, nButton, inputQueue, now, nMode, oAlarm, oMusic
 
   if (inputQueue.qsize() > 0):
     input_str = inputQueue.get()
@@ -246,10 +266,12 @@ def fCommands():
       print("- '3' => button 3")
       print("- '+' => vol +10%")
       print("- '-' => vol -10%")
-      print("- 't' => show time")
+      print("- 'ptime' => show current time & alarm")
+      print("- 'pmode' => show current mode")
+
 
 def fAlarm():
-  global oAlarm, now, bMusicPlay
+  global now, oMusic, oAlarm
   # if alarm time reached => play the sound
   # now.hour, now.minute
   if ((now.hour == oAlarm.hour) and
@@ -259,15 +281,20 @@ def fAlarm():
     oAlarm.bRunForToday = True
     print("Time to wakeup!")
 
-    # music is stopped or paused
-    if (bMusicPlay == 0):
-      pygame.mixer.music.load("11.mp3")
-      pygame.mixer.music.set_volume(nVolume)
-      pygame.mixer.music.play()
-      bMusicPlay = 1
-    elif (bMusicPlay == 2):
-      pygame.mixer.music.unpause()
-      bMusicPlay = 1
+    # music is stopped or paused => we stop it first, then play alarm song
+    if ((pygame.mixer.music.get_busy() == True) or (oMusic.bMusicPlay == 2)):
+      pygame.mixer.music.stop()
+
+    # time to play
+    pygame.mixer.music.load(oAlarm.music_filename)
+    pygame.mixer.music.set_volume(oMusic.nVolume)
+    pygame.mixer.music.play()
+    oMusic.bMusicPlay = 1
+
+  # when music stops => return oMusic.bMusicPlay to 0
+  if ((pygame.mixer.music.get_busy() == False) and
+      ((oMusic.bMusicPlay == 1) or (oMusic.bMusicPlay == 2)):
+    oMusic.bMusicPlay = 0
 
   # reset alarm for next day
   if (oAlarm.bRunForToday == True):
@@ -280,7 +307,7 @@ def fAlarm():
 
 
 def main():
-  global x, iBrightness, tm, inputQueue, bContinue, now
+  global x, oDisplay, tm, inputQueue, bContinue, now
 
   # set the buttons
   GPIO.setmode(GPIO.BCM)
@@ -299,7 +326,7 @@ def main():
   GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
 
   # Initialization
-  tm.brightness(iBrightness)
+  tm.brightness(oDisplay.iBrightness)
   print("=== starting ===")
 
   bContinue = True
