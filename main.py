@@ -293,7 +293,7 @@ def fAlarm():
 
   # when music stops => return oMusic.bMusicPlay to 0
   if ((pygame.mixer.music.get_busy() == False) and
-      ((oMusic.bMusicPlay == 1) or (oMusic.bMusicPlay == 2)):
+      ((oMusic.bMusicPlay == 1) or (oMusic.bMusicPlay == 2))):
     oMusic.bMusicPlay = 0
 
   # reset alarm for next day
