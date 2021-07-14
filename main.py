@@ -22,11 +22,11 @@ class cMusic:
   pass
 
 oAlarm = cAlarm()
-oAlarm.iHour = 23
-oAlarm.iMinute = 10
+oAlarm.bAlarmIsOn = True
+oAlarm.iHour = 00
+oAlarm.iMinute = 00
 oAlarm.sMusicFilename = "11.mp3"
 oAlarm.bRunForToday = False
-oAlarm.bAlarmIsOn = False
 
 oDisplay = cDisplay()
 oDisplay.iPanel = 1
@@ -106,19 +106,27 @@ def fActions():
 
     print("nMode: ", nMode, " - ", oDisplay.sModeTextTitle)
 
-  # Button 3: toggle brightness
-  elif (nButton == 3):
-    print("button3 pressed - ", oDisplay.iBrightness)
-    if (oDisplay.iBrightness >= 7):
-      oDisplay.iBrightness = 0
-    else:
-      oDisplay.iBrightness = oDisplay.iBrightness + 1
-    tm.brightness(oDisplay.iBrightness)
-
 
   # => mode 0: time
   if (nMode == 0):
     oDisplay.iPanel = 0
+
+    if (nButton == 2):
+      oAlarm.bAlarmIsOn = not oAlarm.bAlarmIsOn
+      if (oAlarm.bAlarmIsOn == True):
+        print("Alarm is On")
+      else:
+        print("Alarm is Off")
+
+    # Button 3: toggle brightness
+    elif (nButton == 3):
+      print("button3 pressed - ", oDisplay.iBrightness)
+      if (oDisplay.iBrightness >= 7):
+        oDisplay.iBrightness = 0
+      else:
+        oDisplay.iBrightness = oDisplay.iBrightness + 1
+      tm.brightness(oDisplay.iBrightness)
+
 
   # => mode 1: mp3
   elif (nMode == 1):
@@ -303,7 +311,8 @@ def fAlarm():
   global now, oMusic, oAlarm
   # if alarm time reached => play the sound
   # now.hour, now.minute
-  if ((now.hour == oAlarm.iHour) and
+  if ((oAlarm.bAlarmIsOn == True) and
+      (now.hour == oAlarm.iHour) and
       (now.minute == oAlarm.iMinute) and
       (oAlarm.bRunForToday == False)):
 
