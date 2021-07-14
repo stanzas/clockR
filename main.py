@@ -50,7 +50,6 @@ BTN_THREE = 22
 bIsWifiActivated = 1
 nButton = 0
 nMode = 0
-x = 0
 
 # Button 1 => display time
 def button1(channel):
@@ -76,6 +75,7 @@ def read_kbd_input(inputQueue):
     input_str = input()
     inputQueue.put(input_str)
 
+
 def fActions():
   global nMode, nButton, bIsWifiActivated, oMusic, oDisplay, oAlarm
 
@@ -86,7 +86,7 @@ def fActions():
   # 3: set alarm hours
   # 4: set alarm minutes
 
-  # Button 1: toggle functions
+  # Button 1: toggle modes
   if (nButton == 1):
     if (nMode < 4):
       nMode = nMode + 1
@@ -216,7 +216,7 @@ def fActions():
 
 
 def fDisplay():
-  global x, bIsWifiActivated, tm, now, oAlarm, oDisplay, oMusic
+  global bIsWifiActivated, tm, now, oAlarm, oDisplay, oMusic
 
   # display current time (compare seconds to blink the ":")
   if (oDisplay.iPanel == 0):
@@ -336,7 +336,7 @@ def fAlarm():
 
 
 def main():
-  global x, oDisplay, tm, inputQueue, bContinue, now
+  global oDisplay, tm, inputQueue, bContinue, now
 
   # set the buttons
   GPIO.setmode(GPIO.BCM)
@@ -361,10 +361,11 @@ def main():
   bContinue = True
   while (bContinue):
 
-    fActions()
+    fCommands()
+    if (nButton != 0):
+      fActions()
     fAlarm()
     fDisplay()
-    fCommands()
 
     now = datetime.now()
     time.sleep(0.01)
