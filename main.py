@@ -32,6 +32,7 @@ oDisplay = cDisplay()
 oDisplay.second = 0
 oDisplay.panel = 1
 oDisplay.iBrightness = 0
+oDisplay.blink = True
 
 oMusic = cMusic()
 oMusic.bMusicPlay = 0
@@ -86,10 +87,10 @@ def fActions():
 
   # Button 1: toggle functions
   if (nButton == 1):
-    if (nMode >= 5):
-      nMode = 0
-    else:
+    if (nMode < 4):
       nMode = nMode + 1
+    else:
+      nMode = 0
 
     print("nMode: ", nMode)
 
@@ -145,7 +146,7 @@ def fActions():
       pygame.mixer.music.set_volume(oMusic.nVolume)
       oMusic.nVolume_prev = oMusic.nVolume
 
-  # => mode 2: wifi
+  # => mode 2: config wifi
   elif (nMode == 2):
     oDisplay.panel = 2
 
@@ -160,6 +161,8 @@ def fActions():
 
   # => mode 3: change alarm hours
   elif (nMode == 3):
+    oDisplay.panel = 3
+
     # Button 3: button '+'
     if (nButton == 4):
       if (oAlarm.hour < 23):
@@ -178,6 +181,8 @@ def fActions():
 
   # => mode 4: change alarm minutes
   elif (nMode == 4):
+    oDisplay.panel = 4
+
     # Button 4: button '+'
     if (nButton == 4):
       if (oAlarm.minute < 59):
@@ -205,12 +210,8 @@ def fDisplay():
   if (oDisplay.panel == 0):
     if (now.second != oDisplay.second):
       oDisplay.second = now.second
-      if (x != 1):
-        tm.numbers(now.hour, now.minute)
-        x = 1
-      else:
-        tm.show(now.strftime("%H%M"))
-        x = 0
+      tm.numbers(now.hour, now.minute, colon=oDisplay.blink)
+      oDisplay.blink = !oDisplay.blink
 
   # display mp3 play/stop
   elif (oDisplay.panel == 1):
@@ -226,9 +227,25 @@ def fDisplay():
     else:
       tm.show("WON-")
 
-  # display Alarm time set
+  # display Alarm time set: hours
   elif (oDisplay.panel == 3):
-    tm.numbers(oAlarm.hour, oAlarm.minute)
+    if (now.second != oDisplay.second):
+      oDisplay.second = now.second
+      oDisplay.blink = !oDisplay.blink
+      if (oDisplay.blink == True):
+        tm.number(oAlarm.minute)
+      else:
+        tm.numbers(oAlarm.hour, oAlarm.minute, colon=False)
+
+  # display Alarm time set: minutes
+  elif (oDisplay.panel == 4):
+    if (now.second != oDisplay.second):
+      oDisplay.second = now.second
+      oDisplay.blink = !oDisplay.blink
+      if (oDisplay.blink == True):
+        tm.numbers(oAlarm.hour, )
+      else:
+        tm.numbers(oAlarm.hour, oAlarm.minute, colon=False)
 
 
 def fCommands():
