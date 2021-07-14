@@ -211,7 +211,7 @@ def fDisplay():
     if (now.second != oDisplay.second):
       oDisplay.second = now.second
       tm.numbers(now.hour, now.minute, colon=oDisplay.blink)
-      oDisplay.blink = !oDisplay.blink
+      oDisplay.blink = not oDisplay.blink
 
   # display mp3 play/stop
   elif (oDisplay.panel == 1):
@@ -231,7 +231,7 @@ def fDisplay():
   elif (oDisplay.panel == 3):
     if (now.second != oDisplay.second):
       oDisplay.second = now.second
-      oDisplay.blink = !oDisplay.blink
+      oDisplay.blink = not oDisplay.blink
       if (oDisplay.blink == True):
         tm.number(oAlarm.minute)
       else:
@@ -241,7 +241,7 @@ def fDisplay():
   elif (oDisplay.panel == 4):
     if (now.second != oDisplay.second):
       oDisplay.second = now.second
-      oDisplay.blink = !oDisplay.blink
+      oDisplay.blink = not oDisplay.blink
       if (oDisplay.blink == True):
         tm.numbers(oAlarm.hour, )
       else:
