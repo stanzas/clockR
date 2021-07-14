@@ -118,6 +118,8 @@ def fActions():
         print("Alarm has been stopped")
         pygame.mixer.music.stop()
         oMusic.bMusicPlay = 0
+        oAlarm.bRunForToday = False
+        oAlarm.bIsRunning = False
 
       # when alarm is not running => toggle alarm on/off
       else:
