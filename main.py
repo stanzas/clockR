@@ -27,6 +27,7 @@ oAlarm.iHour = 00
 oAlarm.iMinute = 00
 oAlarm.sMusicFilename = "11.mp3"
 oAlarm.bRunForToday = False
+oAlarm.bIsRunning = False
 
 oDisplay = cDisplay()
 oDisplay.iPanel = 1
@@ -112,11 +113,20 @@ def fActions():
     oDisplay.iPanel = 0
 
     if (nButton == 2):
-      oAlarm.bAlarmIsOn = not oAlarm.bAlarmIsOn
-      if (oAlarm.bAlarmIsOn == True):
-        print("Alarm is On")
+      # when alarm is running => stop it with button 2
+      if (oAlarm.bIsRunning == True):
+        print("Alarm has been stopped")
+        pygame.mixer.music.stop()
+        oMusic.bMusicPlay = 0
+
+      # when alarm is not running => toggle alarm on/off
       else:
-        print("Alarm is Off")
+
+        oAlarm.bAlarmIsOn = not oAlarm.bAlarmIsOn
+        if (oAlarm.bAlarmIsOn == True):
+          print("Alarm is On")
+        else:
+          print("Alarm is Off")
 
     # Button 3: toggle brightness
     elif (nButton == 3):
@@ -316,6 +326,7 @@ def fAlarm():
       (now.minute == oAlarm.iMinute) and
       (oAlarm.bRunForToday == False)):
 
+    oAlarm.bIsRunning = True
     oAlarm.bRunForToday = True
     print("Time to wakeup!")
 
@@ -329,10 +340,12 @@ def fAlarm():
     pygame.mixer.music.play()
     oMusic.bMusicPlay = 1
 
-  # when music stops => return oMusic.bMusicPlay to 0
+  # when music stops => return oMusic.bMusicPlay to 0 & set alarm is not running
   if ((pygame.mixer.music.get_busy() == False) and
       ((oMusic.bMusicPlay == 1) or (oMusic.bMusicPlay == 2))):
     oMusic.bMusicPlay = 0
+    oAlarm.bIsRunning = False
+    oAlarm.bRunForToday = False
 
   # reset alarm for next day
   if (oAlarm.bRunForToday == True):
