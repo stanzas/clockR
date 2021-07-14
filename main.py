@@ -243,7 +243,7 @@ def fDisplay():
       oDisplay.second = now.second
       oDisplay.blink = not oDisplay.blink
       if (oDisplay.blink == True):
-        tm.numbers(oAlarm.hour, 0, colon=False)
+        tm.show(str(oAlarm.hour).zfill(2) + "  ")
       else:
         tm.numbers(oAlarm.hour, oAlarm.minute, colon=False)
 
