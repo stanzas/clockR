@@ -22,22 +22,23 @@ class cMusic:
   pass
 
 oAlarm = cAlarm()
-oAlarm.hour = 23
-oAlarm.minute = 10
-oAlarm.music_filename = "11.mp3"
+oAlarm.iHour = 23
+oAlarm.iMinute = 10
+oAlarm.sMusicFilename = "11.mp3"
 oAlarm.bRunForToday = False
-oAlarm.isOn = False
+oAlarm.bAlarmIsOn = False
 
 oDisplay = cDisplay()
-oDisplay.second = 0
-oDisplay.panel = 1
+oDisplay.iPanel = 1
 oDisplay.iBrightness = 0
-oDisplay.blink = True
+oDisplay.sModeTextTitle = "Time"
+oDisplay.tmp_iSecond = 0
+oDisplay.tmp_bBlink = True
 
 oMusic = cMusic()
 oMusic.bMusicPlay = 0
-oMusic.nVolume = 0.2
-oMusic.nVolume_prev = oMusic.nVolume
+oMusic.iVolume = 0.2
+oMusic.iVolume_prev = oMusic.iVolume
 
 
 tm = tm1637.TM1637(clk=5, dio=4)
@@ -92,7 +93,18 @@ def fActions():
     else:
       nMode = 0
 
-    print("nMode: ", nMode)
+    if (nMode == 0):
+      oDisplay.sModeTextTitle = "Time"
+    elif (nMode == 1):
+      oDisplay.sModeTextTitle = "Music"
+    elif (nMode == 2):
+      oDisplay.sModeTextTitle = "Config: wifi"
+    elif (nMode == 3):
+      oDisplay.sModeTextTitle = "Alarm: set Hour"
+    elif (nMode == 4):
+      oDisplay.sModeTextTitle = "Alarm: set Minute"
+
+    print("nMode: ", nMode, " - ", oDisplay.sModeTextTitle)
 
   # Button 3: toggle brightness
   elif (nButton == 3):
@@ -106,17 +118,17 @@ def fActions():
 
   # => mode 0: time
   if (nMode == 0):
-    oDisplay.panel = 0
+    oDisplay.iPanel = 0
 
   # => mode 1: mp3
   elif (nMode == 1):
-    oDisplay.panel = 1
+    oDisplay.iPanel = 1
 
     # button 2: play/stop
     if (nButton == 2):
       if (oMusic.bMusicPlay == 0):
-        pygame.mixer.music.load(oAlarm.music_filename)
-        pygame.mixer.music.set_volume(oMusic.nVolume)
+        pygame.mixer.music.load(oAlarm.sMusicFilename)
+        pygame.mixer.music.set_volume(oMusic.iVolume)
         pygame.mixer.music.play()
         oMusic.bMusicPlay = 1
 
@@ -134,21 +146,21 @@ def fActions():
 
     # button 4: button +
     elif (nButton == 4):
-      if (oMusic.nVolume < 1):
-        oMusic.nVolume = oMusic.nVolume + 0.1
+      if (oMusic.iVolume < 1):
+        oMusic.iVolume = oMusic.iVolume + 0.1
 
     # button 5: button -
     elif (nButton == 5):
-      if (oMusic.nVolume > 0):
-        oMusic.nVolume = oMusic.nVolume - 0.1
+      if (oMusic.iVolume > 0):
+        oMusic.iVolume = oMusic.iVolume - 0.1
 
-    if (oMusic.nVolume != oMusic.nVolume_prev):
-      pygame.mixer.music.set_volume(oMusic.nVolume)
-      oMusic.nVolume_prev = oMusic.nVolume
+    if (oMusic.iVolume != oMusic.iVolume_prev):
+      pygame.mixer.music.set_volume(oMusic.iVolume)
+      oMusic.iVolume_prev = oMusic.iVolume
 
   # => mode 2: config wifi
   elif (nMode == 2):
-    oDisplay.panel = 2
+    oDisplay.iPanel = 2
 
     if (nButton == 2):
 
@@ -161,43 +173,43 @@ def fActions():
 
   # => mode 3: change alarm hours
   elif (nMode == 3):
-    oDisplay.panel = 3
+    oDisplay.iPanel = 3
 
     # Button 3: button '+'
     if (nButton == 4):
-      if (oAlarm.hour < 23):
-        oAlarm.hour = oAlarm.hour + 1
+      if (oAlarm.iHour < 23):
+        oAlarm.iHour = oAlarm.iHour + 1
       else:
-        oAlarm.hour = 0
-      print(oAlarm.hour, ":", oAlarm.minute)
+        oAlarm.iHour = 0
+      print(oAlarm.iHour, ":", oAlarm.iMinute)
 
     # Button 4: button '-'
     elif (nButton == 5):
-      if (oAlarm.hour > 0):
-        oAlarm.hour = oAlarm.hour - 1
+      if (oAlarm.iHour > 0):
+        oAlarm.iHour = oAlarm.iHour - 1
       else:
-        oAlarm.hour = 23
-      print(oAlarm.hour, ":", oAlarm.minute)
+        oAlarm.iHour = 23
+      print(oAlarm.iHour, ":", oAlarm.iMinute)
 
   # => mode 4: change alarm minutes
   elif (nMode == 4):
-    oDisplay.panel = 4
+    oDisplay.iPanel = 4
 
     # Button 4: button '+'
     if (nButton == 4):
-      if (oAlarm.minute < 59):
-        oAlarm.minute = oAlarm.minute + 1
+      if (oAlarm.iMinute < 59):
+        oAlarm.iMinute = oAlarm.iMinute + 1
       else:
-        oAlarm.minute = 0
-      print(oAlarm.hour, ":", oAlarm.minute)
+        oAlarm.iMinute = 0
+      print(oAlarm.iHour, ":", oAlarm.iMinute)
 
     # Button 5: button '-'
     elif (nButton == 5):
-      if (oAlarm.minute > 0):
-        oAlarm.minute = oAlarm.minute - 1
+      if (oAlarm.iMinute > 0):
+        oAlarm.iMinute = oAlarm.iMinute - 1
       else:
-        oAlarm.minute = 59
-      print(oAlarm.hour, ":", oAlarm.minute)
+        oAlarm.iMinute = 59
+      print(oAlarm.iHour, ":", oAlarm.iMinute)
 
   # reset button pressed
   nButton = 0
@@ -207,45 +219,45 @@ def fDisplay():
   global x, bIsWifiActivated, tm, now, oAlarm, oDisplay, oMusic
 
   # display current time (compare seconds to blink the ":")
-  if (oDisplay.panel == 0):
-    if (now.second != oDisplay.second):
-      oDisplay.second = now.second
-      tm.numbers(now.hour, now.minute, colon=oDisplay.blink)
-      oDisplay.blink = not oDisplay.blink
+  if (oDisplay.iPanel == 0):
+    if (now.second != oDisplay.tmp_iSecond):
+      oDisplay.tmp_iSecond = now.second
+      tm.numbers(now.hour, now.minute, colon=oDisplay.tmp_bBlink)
+      oDisplay.tmp_bBlink = not oDisplay.tmp_bBlink
 
   # display mp3 play/stop
-  elif (oDisplay.panel == 1):
+  elif (oDisplay.iPanel == 1):
     if (oMusic.bMusicPlay == 0):
       tm.show("play")
     else:
       tm.show("stop")
 
   # display Wifi state
-  elif (oDisplay.panel == 2):
+  elif (oDisplay.iPanel == 2):
     if (bIsWifiActivated == 0):
       tm.show("WOFF")
     else:
       tm.show("WON-")
 
   # display Alarm time set: hours
-  elif (oDisplay.panel == 3):
-    if (now.second != oDisplay.second):
-      oDisplay.second = now.second
-      oDisplay.blink = not oDisplay.blink
-      if (oDisplay.blink == True):
-        tm.number(oAlarm.minute)
+  elif (oDisplay.iPanel == 3):
+    if (now.second != oDisplay.tmp_iSecond):
+      oDisplay.tmp_iSecond = now.second
+      oDisplay.tmp_bBlink = not oDisplay.tmp_bBlink
+      if (oDisplay.tmp_bBlink == True):
+        tm.number(oAlarm.iMinute)
       else:
-        tm.numbers(oAlarm.hour, oAlarm.minute, colon=False)
+        tm.numbers(oAlarm.iHour, oAlarm.iMinute, colon=False)
 
   # display Alarm time set: minutes
-  elif (oDisplay.panel == 4):
-    if (now.second != oDisplay.second):
-      oDisplay.second = now.second
-      oDisplay.blink = not oDisplay.blink
-      if (oDisplay.blink == True):
-        tm.show(str(oAlarm.hour).zfill(2) + "  ")
+  elif (oDisplay.iPanel == 4):
+    if (now.second != oDisplay.tmp_iSecond):
+      oDisplay.tmp_iSecond = now.second
+      oDisplay.tmp_bBlink = not oDisplay.tmp_bBlink
+      if (oDisplay.tmp_bBlink == True):
+        tm.show(str(oAlarm.iHour).zfill(2) + "  ")
       else:
-        tm.numbers(oAlarm.hour, oAlarm.minute, colon=False)
+        tm.numbers(oAlarm.iHour, oAlarm.iMinute, colon=False)
 
 
 def fCommands():
@@ -273,7 +285,7 @@ def fCommands():
 
     elif (input_str == "ptime"):
       print("time: ", now.hour, ":", now.minute, ":", now.second)
-      print("alarm: ", oAlarm.hour, ":", oAlarm.minute)
+      print("alarm: ", oAlarm.iHour, ":", oAlarm.iMinute)
 
     else:
       print("Unknown command. Comands are:")
@@ -291,8 +303,8 @@ def fAlarm():
   global now, oMusic, oAlarm
   # if alarm time reached => play the sound
   # now.hour, now.minute
-  if ((now.hour == oAlarm.hour) and
-      (now.minute == oAlarm.minute) and
+  if ((now.hour == oAlarm.iHour) and
+      (now.minute == oAlarm.iMinute) and
       (oAlarm.bRunForToday == False)):
 
     oAlarm.bRunForToday = True
@@ -303,8 +315,8 @@ def fAlarm():
       pygame.mixer.music.stop()
 
     # time to play
-    pygame.mixer.music.load(oAlarm.music_filename)
-    pygame.mixer.music.set_volume(oMusic.nVolume)
+    pygame.mixer.music.load(oAlarm.sMusicFilename)
+    pygame.mixer.music.set_volume(oMusic.iVolume)
     pygame.mixer.music.play()
     oMusic.bMusicPlay = 1
 
@@ -316,10 +328,10 @@ def fAlarm():
   # reset alarm for next day
   if (oAlarm.bRunForToday == True):
     # Alarm = Last minute of the hour, need to compare with next hour
-    if ((oAlarm.minute == 59) and (now.hour > oAlarm.hour)):
+    if ((oAlarm.iMinute == 59) and (now.hour > oAlarm.iHour)):
       oAlarm.bRunForToday = False
 
-    elif ((now.hour == oAlarm.hour) and (now.minute > oAlarm.minute)):
+    elif ((now.hour == oAlarm.iHour) and (now.minute > oAlarm.iMinute)):
       oAlarm.bRunForToday = False
 
 
