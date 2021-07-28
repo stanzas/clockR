@@ -110,7 +110,7 @@ def fReadConfig():
     oConfig.iDisplayBrightness = int(config['display']['brightness'])
     oConfig.fSoundVolume = float(config['sound']['volume'])
 
-#    oAlarm.bAlarmIsOn = oConfig.bAlarmIsOn
+    oAlarm.bAlarmIsOn = oConfig.bAlarmIsOn
 #    oAlarm.iHour = oConfig.iAlarmHour
 #    oAlarm.iMinute = oConfig.iAlarmMinute
 #    oAlarm.sMusicFilename = oConfig.sAlarmMusicFilename
