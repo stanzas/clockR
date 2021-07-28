@@ -10,6 +10,7 @@ import threading
 import queue
 import time
 from typing import NamedTuple
+import configparser
 
 
 class cAlarm:
@@ -19,6 +20,9 @@ class cDisplay:
   pass
 
 class cMusic:
+  pass
+
+class cConfig:
   pass
 
 oAlarm = cAlarm()
@@ -37,9 +41,18 @@ oDisplay.tmp_iSecond = 0
 oDisplay.tmp_bBlink = True
 
 oMusic = cMusic()
-oMusic.bMusicPlay = 0
+oMusic.iMusicPlay = 0
 oMusic.iVolume = 0.2
 oMusic.iVolume_prev = oMusic.iVolume
+
+oConfig = cConfig()
+oConfig.bAlarmIsOn = True
+oConfig.iAlarmHour = 0
+oConfig.iAlarmMinute = 0
+oConfig.sAlarmMusicFilename = ""
+oConfig.iDisplayBrightness = 0
+oConfig.iSoundVolume = 0.2
+
 
 
 tm = tm1637.TM1637(clk=5, dio=4)
@@ -75,6 +88,21 @@ def read_kbd_input(inputQueue):
   while (True):
     input_str = input()
     inputQueue.put(input_str)
+
+
+# read config file and update variables
+def fReadConfig():
+  config = configparser.ConfigParser()
+  config = configparser.ConfigParser()
+  config.read_file(open('config.cfg'))
+
+  if ('alarm' in config):
+    print (config['alarm']['hour'])
+    print (config['alarm']['minute'])
+    print (config['alarm']['activated'])
+    print (config['alarm']['music_filename'])
+    print (config['display']['brightness'])
+    print (config['sound']['volume'])
 
 
 def fActions():
@@ -117,7 +145,7 @@ def fActions():
       if (oAlarm.bIsRunning == True):
         print("Alarm has been stopped")
         pygame.mixer.music.stop()
-        oMusic.bMusicPlay = 0
+        oMusic.iMusicPlay = 0
         oAlarm.bRunForToday = False
         oAlarm.bIsRunning = False
 
@@ -140,29 +168,29 @@ def fActions():
       tm.brightness(oDisplay.iBrightness)
 
 
-  # => mode 1: mp3
+  # => mode 1: music
   elif (nMode == 1):
     oDisplay.iPanel = 1
 
     # button 2: play/stop
     if (nButton == 2):
-      if (oMusic.bMusicPlay == 0):
+      if (oMusic.iMusicPlay == 0):
         pygame.mixer.music.load(oAlarm.sMusicFilename)
         pygame.mixer.music.set_volume(oMusic.iVolume)
         pygame.mixer.music.play()
-        oMusic.bMusicPlay = 1
+        oMusic.iMusicPlay = 1
 
-      elif (oMusic.bMusicPlay == 1):
+      elif (oMusic.iMusicPlay == 1):
         pygame.mixer.music.pause()
-        oMusic.bMusicPlay = 2
-      elif (oMusic.bMusicPlay == 2):
+        oMusic.iMusicPlay = 2
+      elif (oMusic.iMusicPlay == 2):
         pygame.mixer.music.unpause()
-        oMusic.bMusicPlay = 1
+        oMusic.iMusicPlay = 1
 
     # button 3: next or stop?
     elif (nButton == 3):
       pygame.mixer.music.stop()
-      oMusic.bMusicPlay = 0
+      oMusic.iMusicPlay = 0
 
     # button 4: button +
     elif (nButton == 4):
@@ -247,7 +275,7 @@ def fDisplay():
 
   # display mp3 play/stop
   elif (oDisplay.iPanel == 1):
-    if (oMusic.bMusicPlay == 0):
+    if (oMusic.iMusicPlay == 0):
       tm.show("play")
     else:
       tm.show("stop")
@@ -307,6 +335,9 @@ def fCommands():
       print("time: ", now.hour, ":", now.minute, ":", now.second)
       print("alarm: ", oAlarm.iHour, ":", oAlarm.iMinute)
 
+    elif (input_str == "pvol"):
+      print("volume: ", oMusic.iVolume)
+
     else:
       print("Unknown command. Comands are:")
       print("- 'q' => exit ;")
@@ -317,6 +348,7 @@ def fCommands():
       print("- '-' => vol -10%")
       print("- 'ptime' => show current time & alarm")
       print("- 'pmode' => show current mode")
+      print("- 'pvol' => show current volume")
 
 
 def fAlarm():
@@ -333,19 +365,19 @@ def fAlarm():
     print("Time to wakeup!")
 
     # music is stopped or paused => we stop it first, then play alarm song
-    if ((pygame.mixer.music.get_busy() == True) or (oMusic.bMusicPlay == 2)):
+    if ((pygame.mixer.music.get_busy() == True) or (oMusic.iMusicPlay == 2)):
       pygame.mixer.music.stop()
 
     # time to play
     pygame.mixer.music.load(oAlarm.sMusicFilename)
     pygame.mixer.music.set_volume(oMusic.iVolume)
     pygame.mixer.music.play()
-    oMusic.bMusicPlay = 1
+    oMusic.iMusicPlay = 1
 
-  # when music stops => return oMusic.bMusicPlay to 0 & set alarm is not running
+  # when music stops => return oMusic.iMusicPlay to 0 & set alarm is not running
   if ((pygame.mixer.music.get_busy() == False) and
-      ((oMusic.bMusicPlay == 1) or (oMusic.bMusicPlay == 2))):
-    oMusic.bMusicPlay = 0
+      ((oMusic.iMusicPlay == 1) or (oMusic.iMusicPlay == 2))):
+    oMusic.iMusicPlay = 0
     oAlarm.bIsRunning = False
     oAlarm.bRunForToday = False
 
@@ -377,6 +409,8 @@ def main():
   GPIO.add_event_detect(BTN_ONE, GPIO.FALLING, callback=button1, bouncetime=300)
   GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
   GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
+
+  fReadConfig()
 
   # Initialization
   tm.brightness(oDisplay.iBrightness)
