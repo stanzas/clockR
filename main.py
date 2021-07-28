@@ -42,8 +42,8 @@ oDisplay.tmp_bBlink = True
 
 oMusic = cMusic()
 oMusic.iMusicPlay = 0
-oMusic.iVolume = 0.2
-oMusic.iVolume_prev = oMusic.iVolume
+oMusic.fVolume = 0.2
+oMusic.fVolume_prev = oMusic.fVolume
 
 oConfig = cConfig()
 oConfig.bAlarmIsOn = True
@@ -51,7 +51,7 @@ oConfig.iAlarmHour = 0
 oConfig.iAlarmMinute = 0
 oConfig.sAlarmMusicFilename = ""
 oConfig.iDisplayBrightness = 0
-oConfig.iSoundVolume = 0.2
+oConfig.fSoundVolume = 0.2
 
 
 
@@ -109,14 +109,14 @@ def fReadConfig():
     oConfig.iAlarmMinute = int(config['alarm']['minute'])
     oConfig.sAlarmMusicFilename = config['alarm']['music_filename']
     oConfig.iDisplayBrightness = int(config['display']['brightness'])
-    oConfig.iSoundVolume = int(config['sound']['volume'])
+    oConfig.fSoundVolume = float(config['sound']['volume'])
 
     oAlarm.bAlarmIsOn = oConfig.bAlarmIsOn
     oAlarm.iHour = oConfig.iAlarmHour
     oAlarm.iMinute = oConfig.iAlarmMinute
     oAlarm.sMusicFilename = oConfig.sAlarmMusicFilename
     oDisplay.iBrightness = oConfig.iDisplayBrightness
-    oMusic.iVolume = oConfig.iSoundVolume
+    oMusic.fVolume = oConfig.fSoundVolume
 
 
 def fActions():
@@ -190,7 +190,7 @@ def fActions():
     if (nButton == 2):
       if (oMusic.iMusicPlay == 0):
         pygame.mixer.music.load(oAlarm.sMusicFilename)
-        pygame.mixer.music.set_volume(oMusic.iVolume)
+        pygame.mixer.music.set_volume(oMusic.fVolume)
         pygame.mixer.music.play()
         oMusic.iMusicPlay = 1
 
@@ -208,17 +208,17 @@ def fActions():
 
     # button 4: button +
     elif (nButton == 4):
-      if (oMusic.iVolume < 1):
-        oMusic.iVolume = oMusic.iVolume + 0.1
+      if (oMusic.fVolume < 1):
+        oMusic.fVolume = oMusic.fVolume + 0.1
 
     # button 5: button -
     elif (nButton == 5):
-      if (oMusic.iVolume > 0):
-        oMusic.iVolume = oMusic.iVolume - 0.1
+      if (oMusic.fVolume > 0):
+        oMusic.fVolume = oMusic.fVolume - 0.1
 
-    if (oMusic.iVolume != oMusic.iVolume_prev):
-      pygame.mixer.music.set_volume(oMusic.iVolume)
-      oMusic.iVolume_prev = oMusic.iVolume
+    if (oMusic.fVolume != oMusic.fVolume_prev):
+      pygame.mixer.music.set_volume(oMusic.fVolume)
+      oMusic.fVolume_prev = oMusic.fVolume
 
   # => mode 2: config wifi
   elif (nMode == 2):
@@ -350,7 +350,7 @@ def fCommands():
       print("alarm: ", oAlarm.iHour, ":", oAlarm.iMinute)
 
     elif (input_str == "pvol"):
-      print("volume: ", oMusic.iVolume)
+      print("volume: ", oMusic.fVolume)
 
     else:
       print("Unknown command. Comands are:")
@@ -384,7 +384,7 @@ def fAlarm():
 
     # time to play
     pygame.mixer.music.load(oAlarm.sMusicFilename)
-    pygame.mixer.music.set_volume(oMusic.iVolume)
+    pygame.mixer.music.set_volume(oMusic.fVolume)
     pygame.mixer.music.play()
     oMusic.iMusicPlay = 1
 
