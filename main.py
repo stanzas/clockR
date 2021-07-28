@@ -92,6 +92,7 @@ def read_kbd_input(inputQueue):
 
 # read config file and update variables
 def fReadConfig():
+  global oConfig, oAlarm, oDisplay, oMusic
   config = configparser.ConfigParser()
   config = configparser.ConfigParser()
   config.read_file(open('config.cfg'))
