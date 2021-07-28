@@ -103,19 +103,19 @@ def fReadConfig():
     print (config['display']['brightness'])
     print (config['sound']['volume'])
 
-    oConfig.bAlarmIsOn = config.getboolean('alarm', 'activated')
-    oConfig.iAlarmHour = int(config['alarm']['hour'])
-    oConfig.iAlarmMinute = int(config['alarm']['minute'])
-    oConfig.sAlarmMusicFilename = config['alarm']['music_filename']
-    oConfig.iDisplayBrightness = int(config['display']['brightness'])
-    oConfig.fSoundVolume = float(config['sound']['volume'])
+#    oConfig.bAlarmIsOn = config.getboolean('alarm', 'activated')
+#    oConfig.iAlarmHour = int(config['alarm']['hour'])
+#    oConfig.iAlarmMinute = int(config['alarm']['minute'])
+#    oConfig.sAlarmMusicFilename = config['alarm']['music_filename']
+#    oConfig.iDisplayBrightness = int(config['display']['brightness'])
+#    oConfig.fSoundVolume = float(config['sound']['volume'])
 
-    oAlarm.bAlarmIsOn = oConfig.bAlarmIsOn
-    oAlarm.iHour = oConfig.iAlarmHour
-    oAlarm.iMinute = oConfig.iAlarmMinute
-    oAlarm.sMusicFilename = oConfig.sAlarmMusicFilename
-    oDisplay.iBrightness = oConfig.iDisplayBrightness
-    oMusic.fVolume = oConfig.fSoundVolume
+#    oAlarm.bAlarmIsOn = oConfig.bAlarmIsOn
+#    oAlarm.iHour = oConfig.iAlarmHour
+#    oAlarm.iMinute = oConfig.iAlarmMinute
+#    oAlarm.sMusicFilename = oConfig.sAlarmMusicFilename
+#    oDisplay.iBrightness = oConfig.iDisplayBrightness
+#    oMusic.fVolume = oConfig.fSoundVolume
 
 
 def fActions():
