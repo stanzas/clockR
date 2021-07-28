@@ -114,8 +114,8 @@ def fReadConfig():
     oAlarm.iHour = oConfig.iAlarmHour
     oAlarm.iMinute = oConfig.iAlarmMinute
     oAlarm.sMusicFilename = oConfig.sAlarmMusicFilename
-#    oDisplay.iBrightness = oConfig.iDisplayBrightness
-#    oMusic.fVolume = oConfig.fSoundVolume
+    oDisplay.iBrightness = oConfig.iDisplayBrightness
+    oMusic.fVolume = oConfig.fSoundVolume
 
 
 def fActions():
