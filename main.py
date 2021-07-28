@@ -94,7 +94,6 @@ def read_kbd_input(inputQueue):
 def fReadConfig():
   global oConfig, oAlarm, oDisplay, oMusic
   config = configparser.ConfigParser()
-  config = configparser.ConfigParser()
   config.read_file(open('config.cfg'))
 
   if ('alarm' in config):
@@ -425,7 +424,7 @@ def main():
   GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
   GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
 
-  fReadConfig()
+  #fReadConfig()
 
   # Initialization
   tm.brightness(oDisplay.iBrightness)
