@@ -54,7 +54,6 @@ oConfig.iDisplayBrightness = 0
 oConfig.fSoundVolume = 0.2
 
 
-
 tm = tm1637.TM1637(clk=5, dio=4)
 pygame.mixer.init()
 now = datetime.now()
@@ -424,7 +423,7 @@ def main():
   GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
   GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
 
-  #fReadConfig()
+  fReadConfig()
 
   # Initialization
   tm.brightness(oDisplay.iBrightness)
