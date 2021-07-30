@@ -22,8 +22,75 @@ class cDisplay:
 class cMusic:
   pass
 
-class cConfig:
-  pass
+class cConfig(object):
+  def __init__(self):
+    self.config_filename = 'config.cfg'
+
+    self.bAlarmIsOn = True
+    self.iAlarmHour = 0
+    self.iAlarmMinute = 0
+    self.sAlarmMusicFilename = ""
+    self.iDisplayBrightness = 0
+    self.fSoundVolume = 0.2
+
+    self.config = configparser.ConfigParser()
+
+  @property
+  def bAlarmIsOn(self):
+    return self._bAlarmIsOn
+
+  @bAlarmIsOn.setter
+  def bAlarmIsOn(self, value):
+    self._bAlarmIsOn = value
+
+  @property
+  def iAlarmHour(self):
+    return self._iAlarmHour
+
+  @iAlarmHour.setter
+  def iAlarmHour(self, value):
+    self._iAlarmHour = value
+
+  @property
+  def iAlarmMinute(self):
+    return self._iAlarmMinute
+
+  @iAlarmMinute.setter
+  def iAlarmMinute(self, value):
+    self._iAlarmMinute = value
+
+  @property
+  def sAlarmMusicFilename(self):
+    return self._sAlarmMusicFilename
+
+  @sAlarmMusicFilename.setter
+  def sAlarmMusicFilename(self, value):
+    self._sAlarmMusicFilename = value
+
+  @property
+  def iDisplayBrightness(self):
+    return self._iDisplayBrightness
+
+  @iDisplayBrightness.setter
+  def iDisplayBrightness(self, value):
+    self._iDisplayBrightness = value
+
+  @property
+  def fSoundVolume(self):
+    return self._fSoundVolume
+
+  @fSoundVolume.setter
+  def fSoundVolume(self, value):
+    self._fSoundVolume = value
+
+  def read(self):
+    self.config.read_file(open(self.config_filename))
+
+  def write(self):
+    with open('config.ini', 'w') as configfile:
+      self.config.write(configfile)
+
+
 
 oAlarm = cAlarm()
 oAlarm.bAlarmIsOn = True
@@ -46,12 +113,6 @@ oMusic.fVolume = 0.2
 oMusic.fVolume_prev = oMusic.fVolume
 
 oConfig = cConfig()
-oConfig.bAlarmIsOn = True
-oConfig.iAlarmHour = 0
-oConfig.iAlarmMinute = 0
-oConfig.sAlarmMusicFilename = ""
-oConfig.iDisplayBrightness = 0
-oConfig.fSoundVolume = 0.2
 
 
 tm = tm1637.TM1637(clk=5, dio=4)
@@ -92,16 +153,15 @@ def read_kbd_input(inputQueue):
 # read config file and update variables
 def fReadConfig():
   global oConfig, oAlarm, oDisplay, oMusic
-  config = configparser.ConfigParser()
-  config.read_file(open('config.cfg'))
 
-  if ('alarm' in config):
-    print (config['alarm']['hour'])
-    print (config['alarm']['minute'])
-    print (config['alarm']['activated'])
-    print (config['alarm']['music_filename'])
-    print (config['display']['brightness'])
-    print (config['sound']['volume'])
+  oConfig.read()
+  if ('alarm' in oConfig.config):
+    print (oConfig.config['alarm']['hour'])
+    print (oConfig.config['alarm']['minute'])
+    print (oConfig.config['alarm']['activated'])
+    print (oConfig.config['alarm']['music_filename'])
+    print (oConfig.config['display']['brightness'])
+    print (oConfig.config['sound']['volume'])
 
     oConfig.bAlarmIsOn = config.getboolean('alarm', 'activated')
     oConfig.iAlarmHour = int(config['alarm']['hour'])
@@ -119,7 +179,7 @@ def fReadConfig():
 
 
 def fActions():
-  global nMode, nButton, bIsWifiActivated, oMusic, oDisplay, oAlarm
+  global nMode, nButton, bIsWifiActivated, oMusic, oDisplay, oAlarm, oConfig
 
   # nMode
   # 0: time
@@ -179,6 +239,7 @@ def fActions():
       else:
         oDisplay.iBrightness = oDisplay.iBrightness + 1
       tm.brightness(oDisplay.iBrightness)
+      oConfig.iDisplayBrightness = oDisplay.iBrightness
 
 
   # => mode 1: music
@@ -218,6 +279,7 @@ def fActions():
     if (oMusic.fVolume != oMusic.fVolume_prev):
       pygame.mixer.music.set_volume(oMusic.fVolume)
       oMusic.fVolume_prev = oMusic.fVolume
+      oConfig.iSoundVolume = oMusic.fVolume
 
   # => mode 2: config wifi
   elif (nMode == 2):
@@ -243,6 +305,7 @@ def fActions():
       else:
         oAlarm.iHour = 0
       print(oAlarm.iHour, ":", oAlarm.iMinute)
+      oConfig.iAlarmHour = oAlarm.iHour
 
     # Button 4: button '-'
     elif (nButton == 5):
@@ -251,6 +314,7 @@ def fActions():
       else:
         oAlarm.iHour = 23
       print(oAlarm.iHour, ":", oAlarm.iMinute)
+      oConfig.iAlarmHour = oAlarm.iHour
 
   # => mode 4: change alarm minutes
   elif (nMode == 4):
@@ -263,6 +327,7 @@ def fActions():
       else:
         oAlarm.iMinute = 0
       print(oAlarm.iHour, ":", oAlarm.iMinute)
+      oConfig.iAlarmMinute = oAlarm.iMinute
 
     # Button 5: button '-'
     elif (nButton == 5):
@@ -271,6 +336,7 @@ def fActions():
       else:
         oAlarm.iMinute = 59
       print(oAlarm.iHour, ":", oAlarm.iMinute)
+      oConfig.iAlarmMinute = oAlarm.iMinute
 
   # reset button pressed
   nButton = 0
