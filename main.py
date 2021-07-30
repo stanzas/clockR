@@ -92,7 +92,7 @@ class cConfig(object):
   def read(self):
     self.config.read_file(open(self.config_filename))
 
-  def write(section, key, value):
+  def write(self, section, key, value):
     self.config[section][key] = value
     with open('config.ini', 'w') as configfile:
       self.config.write(configfile)
