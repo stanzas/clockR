@@ -12,12 +12,23 @@ import time
 from typing import NamedTuple
 import configparser
 
+BTN_ONE = 17
+BTN_TWO = 27
+BTN_THREE = 22
+
+now = datetime.now()
+tm = tm1637.TM1637(clk=5, dio=4)
+bIsWifiActivated = 1
+nButton = 0
+nMode = 0
 
 class cMusic:
   def __init__(self):
     self.iMusicPlay = 0
     self.fVolume = 0.2
     self.fVolume_prev = oMusic.fVolume
+
+oMusic = cMusic()
 
 class cAlarm:
   def __init__(self):
@@ -33,6 +44,7 @@ class cAlarm:
     self.bIsRunning = False
     print("Alarm has been stopped")
 
+oAlarm = cAlarm()
 
 class cDisplay:
   def __init__(self):
@@ -42,6 +54,7 @@ class cDisplay:
     self.tmp_iSecond = 0
     self.tmp_bBlink = True
 
+oDisplay = cDisplay()
 
 class cConfig(object):
   def __init__(self):
@@ -116,6 +129,8 @@ class cConfig(object):
 
     with open(self.config_filename, 'w') as configfile:
       self.config.write(configfile)
+
+oConfig = cConfig()
 
 # Button 1 => display time
 def button1(channel):
@@ -466,20 +481,7 @@ def fAlarm():
       oAlarm.bRunForToday = False
 
 
-oMusic = cMusic()
-oAlarm = cAlarm()
-oConfig = cConfig()
-oDisplay = cDisplay()
-
-tm = tm1637.TM1637(clk=5, dio=4)
 pygame.mixer.init()
-now = datetime.now()
-BTN_ONE = 17
-BTN_TWO = 27
-BTN_THREE = 22
-bIsWifiActivated = 1
-nButton = 0
-nMode = 0
 
 def main():
   global oDisplay, tm, inputQueue, bContinue, now
