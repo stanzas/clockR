@@ -163,12 +163,12 @@ def fReadConfig():
     print (oConfig.config['display']['brightness'])
     print (oConfig.config['sound']['volume'])
 
-    oConfig.bAlarmIsOn = config.getboolean('alarm', 'activated')
-    oConfig.iAlarmHour = int(config['alarm']['hour'])
-    oConfig.iAlarmMinute = int(config['alarm']['minute'])
-    oConfig.sAlarmMusicFilename = config['alarm']['music_filename']
-    oConfig.iDisplayBrightness = int(config['display']['brightness'])
-    oConfig.fSoundVolume = float(config['sound']['volume'])
+    oConfig.bAlarmIsOn = oConfig.config.getboolean('alarm', 'activated')
+    oConfig.iAlarmHour = int(oConfig.config['alarm']['hour'])
+    oConfig.iAlarmMinute = int(oConfig.config['alarm']['minute'])
+    oConfig.sAlarmMusicFilename = oConfig.config['alarm']['music_filename']
+    oConfig.iDisplayBrightness = int(oConfig.config['display']['brightness'])
+    oConfig.fSoundVolume = float(oConfig.config['sound']['volume'])
 
     oAlarm.bAlarmIsOn = oConfig.bAlarmIsOn
     oAlarm.iHour = oConfig.iAlarmHour
