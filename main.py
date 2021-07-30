@@ -42,6 +42,7 @@ class cConfig(object):
   @bAlarmIsOn.setter
   def bAlarmIsOn(self, value):
     self._bAlarmIsOn = value
+    self.write("alarm", "activated", value)
 
   @property
   def iAlarmHour(self):
@@ -50,6 +51,7 @@ class cConfig(object):
   @iAlarmHour.setter
   def iAlarmHour(self, value):
     self._iAlarmHour = value
+    self.write("alarm", "hour", value)
 
   @property
   def iAlarmMinute(self):
@@ -58,6 +60,7 @@ class cConfig(object):
   @iAlarmMinute.setter
   def iAlarmMinute(self, value):
     self._iAlarmMinute = value
+    self.write("alarm", "minute", value)
 
   @property
   def sAlarmMusicFilename(self):
@@ -66,6 +69,7 @@ class cConfig(object):
   @sAlarmMusicFilename.setter
   def sAlarmMusicFilename(self, value):
     self._sAlarmMusicFilename = value
+    self.write("alarm", "music_filename", value)
 
   @property
   def iDisplayBrightness(self):
@@ -74,6 +78,7 @@ class cConfig(object):
   @iDisplayBrightness.setter
   def iDisplayBrightness(self, value):
     self._iDisplayBrightness = value
+    self.write("display", "brightness", value)
 
   @property
   def fSoundVolume(self):
@@ -82,9 +87,14 @@ class cConfig(object):
   @fSoundVolume.setter
   def fSoundVolume(self, value):
     self._fSoundVolume = value
+    self.write("sound", "volume", value)
 
   def read(self):
     self.config.read_file(open(self.config_filename))
+
+  def write(section, key, value):
+    self.config[section][key] = value
+    self.write()
 
   def write(self):
     with open('config.ini', 'w') as configfile:
