@@ -26,7 +26,7 @@ class cMusic:
   def __init__(self):
     self.iMusicPlay = 0
     self.fVolume = 0.2
-    self.fVolume_prev = oMusic.fVolume
+    self.fVolume_prev = self.fVolume
 
 oMusic = cMusic()
 
