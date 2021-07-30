@@ -86,12 +86,12 @@ class cConfig(object):
     self.config.read_file(open(self.config_filename))
 
   def write(self):
-    self.config.set('alarm', 'activated', self._bAlarmIsOn)
-    self.config.set('alarm', 'hour', self._iAlarmHour)
-    self.config.set('alarm', 'minute', self._iAlarmMinute)
+    self.config.set('alarm', 'activated', str(self._bAlarmIsOn))
+    self.config.set('alarm', 'hour', str(self._iAlarmHour))
+    self.config.set('alarm', 'minute', str(self._iAlarmMinute))
     self.config.set('alarm', 'music_filename', self._sAlarmMusicFilename)
-    self.config.set('display', 'brightness', self._iDisplayBrightness)
-    self.config.set('sound', 'volume', self._fSoundVolume)
+    self.config.set('display', 'brightness', str(self._iDisplayBrightness))
+    self.config.set('sound', 'volume', str(self._fSoundVolume))
 
     with open(self.config_filename, 'w') as configfile:
       self.config.write(configfile)
