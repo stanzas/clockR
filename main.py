@@ -24,16 +24,15 @@ class cMusic:
 
 class cConfig(object):
   def __init__(self):
+    self.config = configparser.ConfigParser()
     self.config_filename = 'config.cfg'
 
-    self.bAlarmIsOn = True
-    self.iAlarmHour = 0
-    self.iAlarmMinute = 0
-    self.sAlarmMusicFilename = ""
-    self.iDisplayBrightness = 0
-    self.fSoundVolume = 0.2
-
-    self.config = configparser.ConfigParser()
+    self._bAlarmIsOn = True
+    self._iAlarmHour = 0
+    self._iAlarmMinute = 0
+    self._sAlarmMusicFilename = ""
+    self._iDisplayBrightness = 0
+    self._fSoundVolume = 0.2
 
   @property
   def bAlarmIsOn(self):
