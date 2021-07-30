@@ -13,13 +13,30 @@ from typing import NamedTuple
 import configparser
 
 
-class cAlarm:
+class cMusic:
   pass
+
+oMusic = cMusic()
+oMusic.iMusicPlay = 0
+oMusic.fVolume = 0.2
+oMusic.fVolume_prev = oMusic.fVolume
+
+class cAlarm:
+  def __init__(self):
+    self.bAlarmIsOn = True
+    self.iHour = 00
+    self.iMinute = 00
+    self.sMusicFilename = "11.mp3"
+    self.bRunForToday = False
+    self.bIsRunning = False
+
+  def stop(self):
+    pygame.mixer.music.stop()
+    self.bIsRunning = False
+    print("Alarm has been stopped")
+
 
 class cDisplay:
-  pass
-
-class cMusic:
   pass
 
 class cConfig(object):
@@ -98,12 +115,6 @@ class cConfig(object):
 
 
 oAlarm = cAlarm()
-oAlarm.bAlarmIsOn = True
-oAlarm.iHour = 00
-oAlarm.iMinute = 00
-oAlarm.sMusicFilename = "11.mp3"
-oAlarm.bRunForToday = False
-oAlarm.bIsRunning = False
 
 oDisplay = cDisplay()
 oDisplay.iPanel = 1
@@ -111,11 +122,6 @@ oDisplay.iBrightness = 0
 oDisplay.sModeTextTitle = "Time"
 oDisplay.tmp_iSecond = 0
 oDisplay.tmp_bBlink = True
-
-oMusic = cMusic()
-oMusic.iMusicPlay = 0
-oMusic.fVolume = 0.2
-oMusic.fVolume_prev = oMusic.fVolume
 
 oConfig = cConfig()
 
@@ -193,161 +199,159 @@ def fActions():
   # 3: set alarm hours
   # 4: set alarm minutes
 
-  # Button 1: toggle modes
-  if (nButton == 1):
-    if (nMode < 4):
-      nMode = nMode + 1
-    else:
-      nMode = 0
+  # when alarm is running (woke up):
+  # - button 1 => stop the alarm until next day
+  # - button 2 => snooze // not implemented yet
+  if (oAlarm.bIsRunning == True):
+    if (nButton > 0):
+      oMusic.iMusicPlay = 0
+      oAlarm.stop()
 
-    if (nMode == 0):
-      oDisplay.sModeTextTitle = "Time"
-    elif (nMode == 1):
-      oDisplay.sModeTextTitle = "Music"
-    elif (nMode == 2):
-      oDisplay.sModeTextTitle = "Config: wifi"
-    elif (nMode == 3):
-      oDisplay.sModeTextTitle = "Alarm: set Hour"
-    elif (nMode == 4):
-      oDisplay.sModeTextTitle = "Alarm: set Minute"
-
-    print("nMode: ", nMode, " - ", oDisplay.sModeTextTitle)
-
-
-  # => mode 0: time
-  if (nMode == 0):
-    oDisplay.iPanel = 0
-
-    if (nButton == 2):
-      # when alarm is running => stop it with button 2
-      if (oAlarm.bIsRunning == True):
-        print("Alarm has been stopped")
-        pygame.mixer.music.stop()
-        oMusic.iMusicPlay = 0
-        oAlarm.bRunForToday = False
-        oAlarm.bIsRunning = False
-
-      # when alarm is not running => toggle alarm on/off
+  else:
+    # Button 1: toggle modes
+    if (nButton == 1):
+      if (nMode < 4):
+        nMode = nMode + 1
       else:
+        nMode = 0
 
+      if (nMode == 0):
+        oDisplay.sModeTextTitle = "Time"
+      elif (nMode == 1):
+        oDisplay.sModeTextTitle = "Music"
+      elif (nMode == 2):
+        oDisplay.sModeTextTitle = "Config: wifi"
+      elif (nMode == 3):
+        oDisplay.sModeTextTitle = "Alarm: set Hour"
+      elif (nMode == 4):
+        oDisplay.sModeTextTitle = "Alarm: set Minute"
+
+      print("nMode: ", nMode, " - ", oDisplay.sModeTextTitle)
+
+
+    # => mode 0: time
+    if (nMode == 0):
+      oDisplay.iPanel = 0
+
+      if (nButton == 2):
         oAlarm.bAlarmIsOn = not oAlarm.bAlarmIsOn
         if (oAlarm.bAlarmIsOn == True):
           print("Alarm is On")
         else:
           print("Alarm is Off")
 
-    # Button 3: toggle brightness
-    elif (nButton == 3):
-      print("button3 pressed - ", oDisplay.iBrightness)
-      if (oDisplay.iBrightness >= 7):
-        oDisplay.iBrightness = 0
-      else:
-        oDisplay.iBrightness = oDisplay.iBrightness + 1
-      tm.brightness(oDisplay.iBrightness)
-      oConfig.iDisplayBrightness = oDisplay.iBrightness
-      oConfig.write()
+      # Button 3: toggle brightness
+      elif (nButton == 3):
+        print("button3 pressed - ", oDisplay.iBrightness)
+        if (oDisplay.iBrightness >= 7):
+          oDisplay.iBrightness = 0
+        else:
+          oDisplay.iBrightness = oDisplay.iBrightness + 1
+        tm.brightness(oDisplay.iBrightness)
+        oConfig.iDisplayBrightness = oDisplay.iBrightness
+        oConfig.write()
 
 
-  # => mode 1: music
-  elif (nMode == 1):
-    oDisplay.iPanel = 1
+    # => mode 1: music
+    elif (nMode == 1):
+      oDisplay.iPanel = 1
 
-    # button 2: play/stop
-    if (nButton == 2):
-      if (oMusic.iMusicPlay == 0):
-        pygame.mixer.music.load(oAlarm.sMusicFilename)
+      # button 2: play/stop
+      if (nButton == 2):
+        if (oMusic.iMusicPlay == 0):
+          pygame.mixer.music.load(oAlarm.sMusicFilename)
+          pygame.mixer.music.set_volume(oMusic.fVolume)
+          pygame.mixer.music.play()
+          oMusic.iMusicPlay = 1
+
+        elif (oMusic.iMusicPlay == 1):
+          pygame.mixer.music.pause()
+          oMusic.iMusicPlay = 2
+        elif (oMusic.iMusicPlay == 2):
+          pygame.mixer.music.unpause()
+          oMusic.iMusicPlay = 1
+
+      # button 3: next or stop?
+      elif (nButton == 3):
+        pygame.mixer.music.stop()
+        oMusic.iMusicPlay = 0
+
+      # button 4: button +
+      elif (nButton == 4):
+        if (oMusic.fVolume < 1):
+          oMusic.fVolume = oMusic.fVolume + 0.1
+
+      # button 5: button -
+      elif (nButton == 5):
+        if (oMusic.fVolume > 0):
+          oMusic.fVolume = oMusic.fVolume - 0.1
+
+      if (oMusic.fVolume != oMusic.fVolume_prev):
         pygame.mixer.music.set_volume(oMusic.fVolume)
-        pygame.mixer.music.play()
-        oMusic.iMusicPlay = 1
+        oMusic.fVolume_prev = oMusic.fVolume
+        oConfig.iSoundVolume = oMusic.fVolume
+        oConfig.write()
 
-      elif (oMusic.iMusicPlay == 1):
-        pygame.mixer.music.pause()
-        oMusic.iMusicPlay = 2
-      elif (oMusic.iMusicPlay == 2):
-        pygame.mixer.music.unpause()
-        oMusic.iMusicPlay = 1
+    # => mode 2: config wifi
+    elif (nMode == 2):
+      oDisplay.iPanel = 2
 
-    # button 3: next or stop?
-    elif (nButton == 3):
-      pygame.mixer.music.stop()
-      oMusic.iMusicPlay = 0
+      if (nButton == 2):
 
-    # button 4: button +
-    elif (nButton == 4):
-      if (oMusic.fVolume < 1):
-        oMusic.fVolume = oMusic.fVolume + 0.1
+        if (bIsWifiActivated == 1):
+          subprocess.call(["sudo","ifconfig","wlan0","down"])
+          bIsWifiActivated = 0
+        else:
+          subprocess.call(["sudo","ifconfig","wlan0","up"])
+          bIsWifiActivated = 1
 
-    # button 5: button -
-    elif (nButton == 5):
-      if (oMusic.fVolume > 0):
-        oMusic.fVolume = oMusic.fVolume - 0.1
+    # => mode 3: change alarm hours
+    elif (nMode == 3):
+      oDisplay.iPanel = 3
 
-    if (oMusic.fVolume != oMusic.fVolume_prev):
-      pygame.mixer.music.set_volume(oMusic.fVolume)
-      oMusic.fVolume_prev = oMusic.fVolume
-      oConfig.iSoundVolume = oMusic.fVolume
-      oConfig.write()
+      # Button 3: button '+'
+      if (nButton == 4):
+        if (oAlarm.iHour < 23):
+          oAlarm.iHour = oAlarm.iHour + 1
+        else:
+          oAlarm.iHour = 0
+        print(oAlarm.iHour, ":", oAlarm.iMinute)
+        oConfig.iAlarmHour = oAlarm.iHour
+        oConfig.write()
 
-  # => mode 2: config wifi
-  elif (nMode == 2):
-    oDisplay.iPanel = 2
+      # Button 4: button '-'
+      elif (nButton == 5):
+        if (oAlarm.iHour > 0):
+          oAlarm.iHour = oAlarm.iHour - 1
+        else:
+          oAlarm.iHour = 23
+        print(oAlarm.iHour, ":", oAlarm.iMinute)
+        oConfig.iAlarmHour = oAlarm.iHour
+        oConfig.write()
 
-    if (nButton == 2):
+    # => mode 4: change alarm minutes
+    elif (nMode == 4):
+      oDisplay.iPanel = 4
 
-      if (bIsWifiActivated == 1):
-        subprocess.call(["sudo","ifconfig","wlan0","down"])
-        bIsWifiActivated = 0
-      else:
-        subprocess.call(["sudo","ifconfig","wlan0","up"])
-        bIsWifiActivated = 1
+      # Button 4: button '+'
+      if (nButton == 4):
+        if (oAlarm.iMinute < 59):
+          oAlarm.iMinute = oAlarm.iMinute + 1
+        else:
+          oAlarm.iMinute = 0
+        print(oAlarm.iHour, ":", oAlarm.iMinute)
+        oConfig.iAlarmMinute = oAlarm.iMinute
+        oConfig.write()
 
-  # => mode 3: change alarm hours
-  elif (nMode == 3):
-    oDisplay.iPanel = 3
-
-    # Button 3: button '+'
-    if (nButton == 4):
-      if (oAlarm.iHour < 23):
-        oAlarm.iHour = oAlarm.iHour + 1
-      else:
-        oAlarm.iHour = 0
-      print(oAlarm.iHour, ":", oAlarm.iMinute)
-      oConfig.iAlarmHour = oAlarm.iHour
-      oConfig.write()
-
-    # Button 4: button '-'
-    elif (nButton == 5):
-      if (oAlarm.iHour > 0):
-        oAlarm.iHour = oAlarm.iHour - 1
-      else:
-        oAlarm.iHour = 23
-      print(oAlarm.iHour, ":", oAlarm.iMinute)
-      oConfig.iAlarmHour = oAlarm.iHour
-      oConfig.write()
-
-  # => mode 4: change alarm minutes
-  elif (nMode == 4):
-    oDisplay.iPanel = 4
-
-    # Button 4: button '+'
-    if (nButton == 4):
-      if (oAlarm.iMinute < 59):
-        oAlarm.iMinute = oAlarm.iMinute + 1
-      else:
-        oAlarm.iMinute = 0
-      print(oAlarm.iHour, ":", oAlarm.iMinute)
-      oConfig.iAlarmMinute = oAlarm.iMinute
-      oConfig.write()
-
-    # Button 5: button '-'
-    elif (nButton == 5):
-      if (oAlarm.iMinute > 0):
-        oAlarm.iMinute = oAlarm.iMinute - 1
-      else:
-        oAlarm.iMinute = 59
-      print(oAlarm.iHour, ":", oAlarm.iMinute)
-      oConfig.iAlarmMinute = oAlarm.iMinute
-      oConfig.write()
+      # Button 5: button '-'
+      elif (nButton == 5):
+        if (oAlarm.iMinute > 0):
+          oAlarm.iMinute = oAlarm.iMinute - 1
+        else:
+          oAlarm.iMinute = 59
+        print(oAlarm.iHour, ":", oAlarm.iMinute)
+        oConfig.iAlarmMinute = oAlarm.iMinute
+        oConfig.write()
 
   # reset button pressed
   nButton = 0
