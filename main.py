@@ -243,7 +243,7 @@ def fActions():
           oDisplay.iBrightness = 0
         else:
           oDisplay.iBrightness = oDisplay.iBrightness + 1
-        tm.setBrightness(oDisplay.iBrightness)
+        tm.brightness(oDisplay.iBrightness)
         oConfig.iDisplayBrightness = oDisplay.iBrightness
         oConfig.write()
 
@@ -507,7 +507,7 @@ def main():
   fReadConfig()
 
   # Initialization
-  tm.setBrightness(oDisplay.iBrightness)
+  tm.brightness(oDisplay.iBrightness)
   print("=== starting ===")
 
   bContinue = True
