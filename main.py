@@ -163,12 +163,12 @@ def fReadConfig():
 
   oConfig.read()
   if ('alarm' in oConfig.config):
-    print (oConfig.config['alarm']['hour'])
-    print (oConfig.config['alarm']['minute'])
-    print (oConfig.config['alarm']['activated'])
-    print (oConfig.config['alarm']['music_filename'])
-    print (oConfig.config['display']['brightness'])
-    print (oConfig.config['sound']['volume'])
+    print ("Alarm, hours: ", oConfig.config['alarm']['hour'])
+    print ("Alarm, minutes: ", oConfig.config['alarm']['minute'])
+    print ("Alarm, activate: ", oConfig.config['alarm']['activated'])
+    print ("Alarm, default music file: ", oConfig.config['alarm']['music_filename'])
+    print ("Display, brightness", oConfig.config['display']['brightness'])
+    print ("Sound, volume: ", oConfig.config['sound']['volume'])
 
     oConfig.bAlarmIsOn = oConfig.config.getboolean('alarm', 'activated')
     oConfig.iAlarmHour = int(oConfig.config['alarm']['hour'])
@@ -238,12 +238,12 @@ def fActions():
 
       # Button 3: toggle brightness
       elif (nButton == 3):
-        print("button3 pressed - ", oDisplay.iBrightness)
+        print("button3 pressed - brightness: ", oDisplay.iBrightness)
         if (oDisplay.iBrightness >= 7):
           oDisplay.iBrightness = 0
         else:
           oDisplay.iBrightness = oDisplay.iBrightness + 1
-        tm.brightness(oDisplay.iBrightness)
+        tm.setBrightness(oDisplay.iBrightness)
         oConfig.iDisplayBrightness = oDisplay.iBrightness
         oConfig.write()
 
@@ -481,10 +481,11 @@ def fAlarm():
       oAlarm.bRunForToday = False
 
 
-pygame.mixer.init()
-
 def main():
-  global oDisplay, tm, inputQueue, bContinue, now
+  global oDisplay, oConfig, oAlarm, tm, inputQueue, bContinue, now, pygame
+
+  # init the sound
+  pygame.mixer.init()
 
   # set the buttons
   GPIO.setmode(GPIO.BCM)
@@ -502,10 +503,11 @@ def main():
   GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
   GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
 
+  # read & init config from ini file
   fReadConfig()
 
   # Initialization
-  tm.brightness(oDisplay.iBrightness)
+  tm.setBrightness(oDisplay.iBrightness)
   print("=== starting ===")
 
   bContinue = True
