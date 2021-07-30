@@ -31,7 +31,7 @@ class cAlarm:
     self.bIsRunning = False
 
   def stop(self):
-    pygame.mixer.music.stop()
+    #pygame.mixer.music.stop()
     self.bIsRunning = False
     print("Alarm has been stopped")
 
