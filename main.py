@@ -1,16 +1,15 @@
-import RPi.GPIO as GPIO
+from datetime import datetime
+import time
+import threading
+import subprocess
+import queue
 import sys
 import os
-import time
-from datetime import datetime
-import tm1637
-import subprocess
-import pygame
-import threading
-import queue
-import time
-from typing import NamedTuple
 import configparser
+from typing import NamedTuple
+import RPi.GPIO as GPIO
+import tm1637
+import pygame
 
 BTN_ONE = 17
 BTN_TWO = 27
@@ -48,7 +47,7 @@ oAlarm = cAlarm()
 
 class cDisplay:
   def __init__(self):
-    self.iPanel = 1
+    self.iPanel = 0
     self.iBrightness = 0
     self.sModeTextTitle = "Time"
     self.tmp_iSecond = 0
@@ -528,32 +527,3 @@ def main():
 
 if (__name__ == '__main__'):
   main()
-
-#------------------------------------
-# all LEDS on "88:88"
-tm.write([127, 255, 127, 127])
-
-# all LEDS off
-tm.write([0, 0, 0, 0])
-
-# show "0123"
-tm.write([63, 6, 91, 79])
-
-# show "COOL"
-tm.write([0b00111001, 0b00111111, 0b00111111, 0b00111000])
-
-# show "HELP"
-tm.show('help')
-
-# display "dEAd", "bEEF"
-tm.hex(0xdead)
-tm.hex(0xbeef)
-
-#tm.show('EthL')
-#tm.scroll('Ethel', delay=250)
-
-# show "-123"
-#tm.number(-123)
-
-# show temperature '24*C'
-#tm.temperature(24)
