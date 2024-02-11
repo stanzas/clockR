@@ -34,7 +34,7 @@ class cAlarm:
     self.bAlarmIsOn = True
     self.iHour = 00
     self.iMinute = 00
-    self.sMusicFilename = "11.mp3"
+    self.sMusicFilename = "01 - Jour 1.mp3"
     self.bRunForToday = False
     self.bIsRunning = False
 
