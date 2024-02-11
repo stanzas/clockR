@@ -504,6 +504,7 @@ def main():
 
   # read & init config from ini file
   fReadConfig()
+  print("... after reading config file ...")
 
   # Initialization
   tm.brightness(oDisplay.iBrightness)
