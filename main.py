@@ -27,6 +27,7 @@ class cMusic:
     self.iMusicPlay = 0
     self.fVolume = 0.2
     self.fVolume_prev = self.fVolume
+    self.sMusicFilename = "01 - Jour 1.mp3"
 
 oMusic = cMusic()
 
@@ -49,6 +50,7 @@ oAlarm = cAlarm()
 class cDisplay:
   def __init__(self):
     self.iPanel = 0
+    self.iInfo = 0
     self.iBrightness = 0
     self.sModeTextTitle = "Time"
     self.tmp_iSecond = 0
@@ -274,13 +276,15 @@ def fActions():
 
       # button 3: next or stop?
       elif (nButton == 3):
-        pygame.mixer.music.stop()
+        #pygame.mixer.music.stop()
         oMusic.iMusicPlay = 0
+        oDisplay.iInfo = 2
 
       # button 4: button +
       elif (nButton == 4):
         if (oMusic.fVolume < 1):
           oMusic.fVolume = oMusic.fVolume + 0.1
+          oDisplay.iInfo = 3
 
       # button 5: button -
       elif (nButton == 5):
@@ -370,10 +374,15 @@ def fDisplay():
 
   # display mp3 play/stop
   elif (oDisplay.iPanel == 1):
-    if (oMusic.iMusicPlay == 0):
-      tm.show("play")
-    else:
-      tm.show("stop")
+    if (oDisplay.iInfo == 0):
+      if (oMusic.iMusicPlay == 0):
+        tm.show("play")
+      else:
+        tm.show("stop")
+    elif (oDisplay.iInfo == 2):
+      tm.show(oMusic.sMusicFilename)
+    elif (oDisplay.iInfo == 3):
+      tm.show(oMusic.fVolume)
 
   # display Wifi state
   elif (oDisplay.iPanel == 2):
@@ -497,6 +506,7 @@ def main():
   GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
   GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
   GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+  GPIO.setup(BTN_FOUR, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
   inputQueue = queue.Queue()
   inputThread = threading.Thread(target=read_kbd_input, args=(inputQueue,), daemon=True)
@@ -507,6 +517,7 @@ def main():
   GPIO.add_event_detect(BTN_ONE, GPIO.FALLING, callback=button1, bouncetime=300)
   GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
   GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
+  GPIO.add_event_detect(BTN_FOUR, GPIO.FALLING, callback=button4, bouncetime=300)
 
   # read & init config from ini file
   fReadConfig()
