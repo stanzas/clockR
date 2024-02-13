@@ -14,6 +14,7 @@ import pygame
 BTN_ONE = 17
 BTN_TWO = 27
 BTN_THREE = 22
+BTN_FOUR = 23
 
 now = datetime.now()
 tm = tm1637.TM1637(clk=5, dio=4)
