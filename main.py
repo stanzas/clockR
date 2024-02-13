@@ -382,7 +382,7 @@ def fDisplay():
     elif (oDisplay.iInfo == 2):
       tm.show(oMusic.sMusicFilename)
     elif (oDisplay.iInfo == 3):
-      tm.show(oMusic.fVolume)
+      tm.show(int(oMusic.fVolume*100))
 
   # display Wifi state
   elif (oDisplay.iPanel == 2):
