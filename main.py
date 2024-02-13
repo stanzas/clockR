@@ -150,6 +150,11 @@ def button3(channel):
   print("button3 pressed")
   nButton = 3
 
+def button4(channel):
+  global nButton
+  print("button4 pressed")
+  nButton = 4
+
 def read_kbd_input(inputQueue):
   print('Ready for keyboard input:')
   while (True):
