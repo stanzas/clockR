@@ -284,7 +284,9 @@ def fActions():
       elif (nButton == 4):
         if (oMusic.fVolume < 1):
           oMusic.fVolume = oMusic.fVolume + 0.1
-          oDisplay.iInfo = 3
+        else:
+          oMusic.fVolume = 0
+        oDisplay.iInfo = 3
 
       # button 5: button -
       elif (nButton == 5):
