@@ -282,7 +282,7 @@ def fActions():
 
       # button 4: button +
       elif (nButton == 4):
-        if (oMusic.fVolume < 1):
+        if ((oMusic.fVolume + 0.1) < 1):
           oMusic.fVolume = oMusic.fVolume + 0.1
         else:
           oMusic.fVolume = 0
