@@ -137,7 +137,7 @@ oConfig = cConfig()
 # Button 1 => display time
 def button1(channel):
   global nButton
-  print("button1 pressed {}".format(channel))
+  print("button1 pressed", channel)
   nButton = 1
 
 # Button 2 => show Mod2
