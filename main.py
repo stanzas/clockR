@@ -137,12 +137,10 @@ oConfig = cConfig()
 # Button 1 => display time
 def button1(channel):
   global nButton
-  print("button1 pressed")
-  nButton = 1
-
-def button1_rise(channel):
-  global nButton
-  print("button1 unpress")
+  if GPIO.input(BTN_ONE):
+    print("button1 unpressed")
+  else
+    print("button1 pressed")
   nButton = 1
 
 # Button 2 => show Mod2
@@ -521,15 +519,10 @@ def main():
 
   # when a falling edge is detected on port 17, regardless of whatever
   # else is happening in the program, the function my_callback will be run
-  GPIO.add_event_detect(BTN_ONE, GPIO.FALLING, callback=button1, bouncetime=300)
-  GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2, bouncetime=300)
-  GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3, bouncetime=300)
-  GPIO.add_event_detect(BTN_FOUR, GPIO.FALLING, callback=button4, bouncetime=300)
-
-  GPIO.add_event_detect(BTN_ONE, GPIO.RISING, callback=button1_rise, bouncetime=300)
-#  GPIO.add_event_detect(BTN_TWO, GPIO.RISING, callback=button2_rise, bouncetime=300)
-#  GPIO.add_event_detect(BTN_THREE, GPIO.RISING, callback=button3_rise, bouncetime=300)
-#  GPIO.add_event_detect(BTN_FOUR, GPIO.RISING, callback=button4_rise, bouncetime=300)
+  GPIO.add_event_detect(BTN_ONE, GPIO.BOTH, callback=button1, bouncetime=300)
+  GPIO.add_event_detect(BTN_TWO, GPIO.BOTH, callback=button2, bouncetime=300)
+  GPIO.add_event_detect(BTN_THREE, GPIO.BOTH, callback=button3, bouncetime=300)
+  GPIO.add_event_detect(BTN_FOUR, GPIO.BOTH, callback=button4, bouncetime=300)
 
   # read & init config from ini file
   fReadConfig()
