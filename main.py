@@ -516,15 +516,15 @@ def main():
 
   # when a falling edge is detected on port 17, regardless of whatever
   # else is happening in the program, the function my_callback will be run
-  GPIO.add_event_detect(BTN_ONE, GPIO.FALLING, callback=lambda x: button1(0), bouncetime=300)
-  GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=lambda x: button2(0), bouncetime=300)
-  GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=lambda x: button3(0), bouncetime=300)
-  GPIO.add_event_detect(BTN_FOUR, GPIO.FALLING, callback=lambda x: button4(0), bouncetime=300)
+  GPIO.add_event_detect(BTN_ONE, GPIO.FALLING, callback=button1(0), bouncetime=300)
+  GPIO.add_event_detect(BTN_TWO, GPIO.FALLING, callback=button2(0), bouncetime=300)
+  GPIO.add_event_detect(BTN_THREE, GPIO.FALLING, callback=button3(0), bouncetime=300)
+  GPIO.add_event_detect(BTN_FOUR, GPIO.FALLING, callback=button4(0), bouncetime=300)
 
-  GPIO.add_event_detect(BTN_ONE, GPIO.RISING, callback=lambda x: button1(1), bouncetime=300)
-  GPIO.add_event_detect(BTN_TWO, GPIO.RISING, callback=lambda x: button2(1), bouncetime=300)
-  GPIO.add_event_detect(BTN_THREE, GPIO.RISING, callback=lambda x: button3(1), bouncetime=300)
-  GPIO.add_event_detect(BTN_FOUR, GPIO.RISING, callback=lambda x: button4(1), bouncetime=300)
+  GPIO.add_event_detect(BTN_ONE, GPIO.RISING, callback=button1(1), bouncetime=300)
+  GPIO.add_event_detect(BTN_TWO, GPIO.RISING, callback=button2(1), bouncetime=300)
+  GPIO.add_event_detect(BTN_THREE, GPIO.RISING, callback=button3(1), bouncetime=300)
+  GPIO.add_event_detect(BTN_FOUR, GPIO.RISING, callback=button4(1), bouncetime=300)
 
   # read & init config from ini file
   fReadConfig()
