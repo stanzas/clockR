@@ -139,7 +139,7 @@ def button1(channel):
   global nButton
   if GPIO.input(BTN_ONE):
     print("button1 unpressed")
-  else
+  else:
     print("button1 pressed")
   nButton = 1
 
