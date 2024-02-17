@@ -388,7 +388,7 @@ def fDisplay():
       else:
         tm.show("stop")
     elif (oDisplay.iInfo == 2):
-      tm.show(oMusic.sMusicFilename)
+      tm.show(oMusic.sMusicFilename[0:3])
     elif (oDisplay.iInfo == 3):
       tm.number(int(oMusic.fVolume*100))
 
