@@ -253,6 +253,7 @@ def fActions():
   else:
     # Button 1: toggle modes
     if (oButton1.isPressed() == True):
+      print("button 1 pressed in action...")
       if (nMode < 4):
         nMode = nMode + 1
       else:
@@ -542,7 +543,7 @@ def fAlarm():
 
 def main():
   global oDisplay, oConfig, oAlarm, tm, inputQueue, bContinue, now, pygame
-#  global oButton1, oButton2, oButton3, oButton4
+  global oButton1, oButton2, oButton3, oButton4
 
   # init the sound
   pygame.mixer.init()
