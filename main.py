@@ -32,11 +32,11 @@ class cButton:
 
   def onAction(self, channel):
     if GPIO.input(self.iChannel):
-      print("button ", self.iButtonId," pressed")
-      bPressed = True
-    else:
       print("button ", self.iButtonId," unpressed")
       bPressed = False
+    else:
+      print("button ", self.iButtonId," pressed")
+      bPressed = True
 
 class cMusic:
   def __init__(self):
