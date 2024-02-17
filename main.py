@@ -252,7 +252,7 @@ def fActions():
 
   else:
     # Button 1: toggle modes
-    if (oButton1.isPressed == True):
+    if (oButton1.isPressed() == True):
       if (nMode < 4):
         nMode = nMode + 1
       else:
