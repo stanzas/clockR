@@ -538,7 +538,7 @@ def main():
     fDisplay()
 
     now = datetime.now()
-    time.sleep(0.01)
+    time.sleep(0.05)
 
   GPIO.cleanup()
   sys.exit()
