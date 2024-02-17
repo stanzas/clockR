@@ -524,7 +524,7 @@ def fAlarm():
 
 def main():
   global oDisplay, oConfig, oAlarm, tm, inputQueue, bContinue, now, pygame
-  global oButton1, oButton2, oButton3, oButton4
+#  global oButton1, oButton2, oButton3, oButton4
 
   # init the sound
   pygame.mixer.init()
@@ -532,10 +532,11 @@ def main():
   # set the buttons
   GPIO.setmode(GPIO.BCM)
 
-  oButton1(BTN_ONE)
-  oButton2(BTN_TWO)
-  oButton3(BTN_THREE)
-  oButton4(BTN_FOUR)
+  oButton1 = cButton(BTN_ONE)
+  oButton2 = cButton(BTN_TWO)
+  oButton3 = cButton(BTN_THREE)
+  oButton4 = cButton(BTN_FOUR)
+
 #  GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 #  GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 #  GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
