@@ -544,26 +544,14 @@ def main():
   # set the buttons
   GPIO.setmode(GPIO.BCM)
 
-  oButton1.setup()
-  oButton2.setup()
-  oButton3.setup()
-  oButton4.setup()
-
-#  GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-#  GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-#  GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-#  GPIO.setup(BTN_FOUR, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
   inputQueue = queue.Queue()
   inputThread = threading.Thread(target=read_kbd_input, args=(inputQueue,), daemon=True)
   inputThread.start()
 
-  # when a falling edge is detected on port 17, regardless of whatever
-  # else is happening in the program, the function my_callback will be run
-#  GPIO.add_event_detect(BTN_ONE, GPIO.BOTH, callback=oButton1.isPressed, bouncetime=300)
-#  GPIO.add_event_detect(BTN_TWO, GPIO.BOTH, callback=oButton, bouncetime=300)
-#  GPIO.add_event_detect(BTN_THREE, GPIO.BOTH, callback=button3, bouncetime=300)
-#  GPIO.add_event_detect(BTN_FOUR, GPIO.BOTH, callback=button4, bouncetime=300)
+  oButton1.setup()
+  oButton2.setup()
+  oButton3.setup()
+  oButton4.setup()
 
   # read & init config from ini file
   fReadConfig()
