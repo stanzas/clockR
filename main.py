@@ -364,6 +364,11 @@ def fActions():
 #        oConfig.iAlarmMinute = oAlarm.iMinute
 #        oConfig.write()
 
+  oButton1.bPressed = False
+  oButton2.bPressed = False
+  oButton3.bPressed = False
+  oButton4.bPressed = False
+
 def fDisplay():
   global bIsWifiActivated, tm, now, oAlarm, oDisplay, oMusic
 
