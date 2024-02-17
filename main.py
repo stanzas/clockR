@@ -28,7 +28,7 @@ class cButton:
     self.bPressed = False
     GPIO.setup(channel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-  def isPressed(self):
+  def isPressed(channel):
     bPressed = True
   
   def isUnPressed(self):
