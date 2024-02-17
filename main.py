@@ -43,19 +43,12 @@ class cButton:
   def isPressed(self):
     return self.bPressed
 
-oButton1 = cButton(1, BTN_ONE)
-oButton2 = cButton(2, BTN_TWO)
-oButton3 = cButton(3, BTN_THREE)
-oButton4 = cButton(4, BTN_FOUR)
-
 class cMusic:
   def __init__(self):
     self.iMusicPlay = 0
     self.fVolume = 0.2
     self.fVolume_prev = self.fVolume
     self.sMusicFilename = "01 - Jour 1.mp3"
-
-oMusic = cMusic()
 
 class cAlarm:
   def __init__(self):
@@ -71,8 +64,6 @@ class cAlarm:
     self.bIsRunning = False
     print("Alarm has been stopped")
 
-oAlarm = cAlarm()
-
 class cDisplay:
   def __init__(self):
     self.iPanel = 0
@@ -81,8 +72,6 @@ class cDisplay:
     self.sModeTextTitle = "Time"
     self.tmp_iSecond = 0
     self.tmp_bBlink = True
-
-oDisplay = cDisplay()
 
 class cConfig(object):
   def __init__(self):
@@ -503,6 +492,14 @@ def fAlarm():
     elif ((now.hour == oAlarm.iHour) and (now.minute > oAlarm.iMinute)):
       oAlarm.bRunForToday = False
 
+oButton1 = cButton(1, BTN_ONE)
+oButton2 = cButton(2, BTN_TWO)
+oButton3 = cButton(3, BTN_THREE)
+oButton4 = cButton(4, BTN_FOUR)
+
+oMusic = cMusic()
+oAlarm = cAlarm()
+oDisplay = cDisplay()
 
 def main():
   global oDisplay, oConfig, oAlarm, tm, inputQueue, bContinue, now, pygame
@@ -511,7 +508,7 @@ def main():
   # init the sound
   pygame.mixer.init()
 
-  # set the buttons
+  # setup the GPIO/buttons
   GPIO.setmode(GPIO.BCM)
 
   inputQueue = queue.Queue()
@@ -526,8 +523,9 @@ def main():
   # read & init config from ini file
   fReadConfig()
 
-  # Initialization
+  # Display TM1637 Initialization
   tm.brightness(oDisplay.iBrightness)
+
   print("=== starting ===")
 
   bContinue = True
