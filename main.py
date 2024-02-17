@@ -29,6 +29,7 @@ class cButton:
 
   def setup(self):
     GPIO.setup(self.iChannel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    time.sleep(0.05)
     GPIO.add_event_detect(self.iChannel, GPIO.BOTH, callback=self.onAction, bouncetime=300)
 
   def onAction(self, channel):
@@ -538,7 +539,7 @@ def main():
     fDisplay()
 
     now = datetime.now()
-    time.sleep(0.05)
+    time.sleep(0.01)
 
   GPIO.cleanup()
   sys.exit()
