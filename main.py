@@ -305,7 +305,7 @@ def fActions():
         oConfig.write()
 
     # => mode 2: config wifi
-    elif (oButton2.isPressed() == True):
+    elif (nMode == 2):
       oDisplay.iPanel = 2
 
       if (oButton2.isPressed() == True):
@@ -318,7 +318,7 @@ def fActions():
           bIsWifiActivated = 1
 
     # => mode 3: change alarm hours
-    elif (oButton3.isPressed() == True):
+    elif (nMode == 3):
       oDisplay.iPanel = 3
 
       # Button 3: button '+'
