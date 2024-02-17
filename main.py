@@ -25,16 +25,18 @@ nMode = 0
 class cButton:
   def __init__(self, argId, argChannel):
     self.iButtonId = argId
+    self.iChannel = argChannel
     self.bPressed = False
     GPIO.setup(argChannel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.add_event_detect(argChannel, GPIO.BOTH, callback=self.isPressed, bouncetime=300)
 
-  def isPressed(self, channel):
-    print("button ", self.iButtonId," pressed")
-    bPressed = True
-  
-  def isUnPressed(self):
-    bPressed = False
+  def onAction(self, channel):
+    if GPIO.input(self.iChannel):
+      print("button ", self.iButtonId," pressed")
+      bPressed = True
+    else:
+      print("button ", self.iButtonId," unpressed")
+      bPressed = False
 
 class cMusic:
   def __init__(self):
