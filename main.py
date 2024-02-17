@@ -34,11 +34,6 @@ class cButton:
   def isUnPressed(self):
     bPressed = False
 
-oButton1 = cButton()
-oButton2 = cButton()
-oButton3 = cButton()
-oButton4 = cButton()
-
 class cMusic:
   def __init__(self):
     self.iMusicPlay = 0
