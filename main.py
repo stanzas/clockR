@@ -35,10 +35,10 @@ class cButton:
   def onAction(self, channel):
     if GPIO.input(self.iChannel):
       print("button ", self.iButtonId," unpressed")
-      bPressed = False
+      self.bPressed = False
     else:
       print("button ", self.iButtonId," pressed")
-      bPressed = True
+      self.bPressed = True
 
   def isPressed(self):
     return self.bPressed
