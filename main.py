@@ -22,6 +22,23 @@ bIsWifiActivated = 1
 nButton = 0
 nMode = 0
 
+class cButton:
+  def __init__(self, channel):
+    self.iButtonId = 0
+    self.bPressed = False
+    GPIO.setup(channel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+  def isPressed(self):
+    bPressed = True
+  
+  def isUnPressed(self):
+    bPressed = False
+
+oButton1 = cButton()
+oButton2 = cButton()
+oButton3 = cButton()
+oButton4 = cButton()
+
 class cMusic:
   def __init__(self):
     self.iMusicPlay = 0
@@ -138,6 +155,7 @@ oConfig = cConfig()
 def button1(channel):
   global nButton
   if GPIO.input(BTN_ONE):
+
     print("button1 unpressed")
   else:
     print("button1 pressed")
@@ -146,18 +164,27 @@ def button1(channel):
 # Button 2 => show Mod2
 def button2(channel):
   global nButton
-  print("button2 pressed")
+  if GPIO.input(BTN_TWO):
+    print("button2 unpressed")
+  else:
+    print("button2 pressed")
   nButton = 2
 
 # Buton 3 => brightness
 def button3(channel):
   global nButton
-  print("button3 pressed")
+  if GPIO.input(BTN_THREE):
+    print("button3 unpressed")
+  else:
+    print("button3 pressed")
   nButton = 3
 
 def button4(channel):
   global nButton
-  print("button4 pressed")
+  if GPIO.input(BTN_FOUR):
+    print("button4 unpressed")
+  else:
+    print("button4 pressed")
   nButton = 4
 
 def read_kbd_input(inputQueue):
@@ -502,16 +529,22 @@ def fAlarm():
 
 def main():
   global oDisplay, oConfig, oAlarm, tm, inputQueue, bContinue, now, pygame
+  global oButton1, oButton2, oButton3, oButton4
 
   # init the sound
   pygame.mixer.init()
 
   # set the buttons
   GPIO.setmode(GPIO.BCM)
-  GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-  GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-  GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-  GPIO.setup(BTN_FOUR, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+  oButton1(BTN_ONE)
+  oButton2(BTN_TWO)
+  oButton3(BTN_THREE)
+  oButton4(BTN_FOUR)
+#  GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+#  GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+#  GPIO.setup(BTN_THREE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+#  GPIO.setup(BTN_FOUR, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
   inputQueue = queue.Queue()
   inputThread = threading.Thread(target=read_kbd_input, args=(inputQueue,), daemon=True)
@@ -519,10 +552,10 @@ def main():
 
   # when a falling edge is detected on port 17, regardless of whatever
   # else is happening in the program, the function my_callback will be run
-  GPIO.add_event_detect(BTN_ONE, GPIO.BOTH, callback=button1, bouncetime=300)
-  GPIO.add_event_detect(BTN_TWO, GPIO.BOTH, callback=button2, bouncetime=300)
-  GPIO.add_event_detect(BTN_THREE, GPIO.BOTH, callback=button3, bouncetime=300)
-  GPIO.add_event_detect(BTN_FOUR, GPIO.BOTH, callback=button4, bouncetime=300)
+  GPIO.add_event_detect(BTN_ONE, GPIO.BOTH, callback=oButton1.isPressed(), bouncetime=300)
+#  GPIO.add_event_detect(BTN_TWO, GPIO.BOTH, callback=oButton, bouncetime=300)
+#  GPIO.add_event_detect(BTN_THREE, GPIO.BOTH, callback=button3, bouncetime=300)
+#  GPIO.add_event_detect(BTN_FOUR, GPIO.BOTH, callback=button4, bouncetime=300)
 
   # read & init config from ini file
   fReadConfig()
