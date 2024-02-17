@@ -28,7 +28,7 @@ class cButton:
     self.iChannel = argChannel
     self.bPressed = False
     GPIO.setup(argChannel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(argChannel, GPIO.BOTH, callback=self.isPressed, bouncetime=300)
+    GPIO.add_event_detect(argChannel, GPIO.BOTH, callback=self.onAction, bouncetime=300)
 
   def onAction(self, channel):
     if GPIO.input(self.iChannel):
