@@ -209,7 +209,7 @@ def fActions():
   # - button 1 => stop the alarm until next day
   # - button 2 => snooze // not implemented yet
   if (oAlarm.bIsRunning == True):
-    if (oButton1.isPressed == True):
+    if (oButton1.isPressed() == True):
       oMusic.iMusicPlay = 0
       oAlarm.stop()
 
@@ -240,7 +240,7 @@ def fActions():
     if (nMode == 0):
       oDisplay.iPanel = 0
 
-      if (oButton2.isPressed == True):
+      if (oButton2.isPressed() == True):
         oAlarm.bAlarmIsOn = not oAlarm.bAlarmIsOn
         if (oAlarm.bAlarmIsOn == True):
           print("Alarm is On")
@@ -248,7 +248,7 @@ def fActions():
           print("Alarm is Off")
 
       # Button 3: toggle brightness
-      elif (oButton3.isPressed == True):
+      elif (oButton3.isPressed() == True):
         print("button3 pressed - brightness: ", oDisplay.iBrightness)
         if (oDisplay.iBrightness >= 7):
           oDisplay.iBrightness = 0
@@ -264,7 +264,7 @@ def fActions():
       oDisplay.iPanel = 1
 
       # button 2: play/stop
-      if (oButton2.isPressed == True):
+      if (oButton2.isPressed() == True):
         if (oMusic.iMusicPlay == 0):
           pygame.mixer.music.load(oAlarm.sMusicFilename)
           pygame.mixer.music.set_volume(oMusic.fVolume)
@@ -279,13 +279,13 @@ def fActions():
           oMusic.iMusicPlay = 1
 
       # button 3: next or stop?
-      elif (oButton3.isPressed == True):
+      elif (oButton3.isPressed() == True):
         #pygame.mixer.music.stop()
         oMusic.iMusicPlay = 0
         oDisplay.iInfo = 2
 
       # button 4: button +
-      elif (oButton4.isPressed == True):
+      elif (oButton4.isPressed() == True):
         if ((oMusic.fVolume + 0.1) < 1):
           oMusic.fVolume = oMusic.fVolume + 0.1
         else:
@@ -307,7 +307,7 @@ def fActions():
     elif (oButton2.isPressed() == True):
       oDisplay.iPanel = 2
 
-      if (oButton2.isPressed == True):
+      if (oButton2.isPressed() == True):
 
         if (bIsWifiActivated == 1):
           subprocess.call(["sudo","ifconfig","wlan0","down"])
@@ -317,11 +317,11 @@ def fActions():
           bIsWifiActivated = 1
 
     # => mode 3: change alarm hours
-    elif (oButton3.isPressed == True):
+    elif (oButton3.isPressed() == True):
       oDisplay.iPanel = 3
 
       # Button 3: button '+'
-      if (oButton4.isPressed == True):
+      if (oButton4.isPressed() == True):
         if (oAlarm.iHour < 23):
           oAlarm.iHour = oAlarm.iHour + 1
         else:
@@ -331,7 +331,7 @@ def fActions():
         oConfig.write()
 
       # Button 4: button '-'
-      elif (oButton4.isPressed == True):
+      elif (oButton4.isPressed() == True):
         if (oAlarm.iHour > 0):
           oAlarm.iHour = oAlarm.iHour - 1
         else:
@@ -345,7 +345,7 @@ def fActions():
       oDisplay.iPanel = 4
 
       # Button 4: button '+'
-      if (oButton4.isPressed == True):
+      if (oButton4.isPressed() == True):
         if (oAlarm.iMinute < 59):
           oAlarm.iMinute = oAlarm.iMinute + 1
         else:
@@ -524,7 +524,6 @@ def main():
 
   # read & init config from ini file
   fReadConfig()
-  print("... after reading config file ...")
 
   # Initialization
   tm.brightness(oDisplay.iBrightness)
