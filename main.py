@@ -29,8 +29,8 @@ class cButton:
 
   def setup(self):
     GPIO.setup(self.iChannel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    time.sleep(0.05)
     GPIO.add_event_detect(self.iChannel, GPIO.BOTH, callback=self.onAction, bouncetime=300)
+    print("button ", self.iButtonId," setup OK")
 
   def onAction(self, channel):
     if GPIO.input(self.iChannel):
