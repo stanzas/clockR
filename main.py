@@ -27,8 +27,10 @@ class cButton:
     self.iButtonId = argId
     self.iChannel = argChannel
     self.bPressed = False
-    GPIO.setup(argChannel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(argChannel, GPIO.BOTH, callback=self.onAction, bouncetime=300)
+
+  def setup(self):
+    GPIO.setup(self.iChannel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(self.iChannel, GPIO.BOTH, callback=self.onAction, bouncetime=300)
 
   def onAction(self, channel):
     if GPIO.input(self.iChannel):
@@ -40,6 +42,11 @@ class cButton:
 
   def isPressed(self):
     return self.bPressed
+
+oButton1 = cButton(1, BTN_ONE)
+oButton2 = cButton(2, BTN_TWO)
+oButton3 = cButton(3, BTN_THREE)
+oButton4 = cButton(4, BTN_FOUR)
 
 class cMusic:
   def __init__(self):
@@ -543,10 +550,10 @@ def main():
   # set the buttons
   GPIO.setmode(GPIO.BCM)
 
-  oButton1 = cButton(1, BTN_ONE)
-  oButton2 = cButton(2, BTN_TWO)
-  oButton3 = cButton(3, BTN_THREE)
-  oButton4 = cButton(4, BTN_FOUR)
+  oButton1.setup()
+  oButton2.setup()
+  oButton3.setup()
+  oButton4.setup()
 
 #  GPIO.setup(BTN_ONE, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 #  GPIO.setup(BTN_TWO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
