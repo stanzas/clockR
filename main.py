@@ -19,7 +19,6 @@ BTN_FOUR = 23
 now = datetime.now()
 tm = tm1637.TM1637(clk=5, dio=4)
 bIsWifiActivated = 1
-nButton = 0
 nMode = 0
 
 class cButton:
@@ -160,42 +159,6 @@ class cConfig(object):
 
 oConfig = cConfig()
 
-# Button 1 => display time
-def button1(channel):
-  global nButton
-  if GPIO.input(BTN_ONE):
-
-    print("button1 unpressed")
-  else:
-    print("button1 pressed")
-  nButton = 1
-
-# Button 2 => show Mod2
-def button2(channel):
-  global nButton
-  if GPIO.input(BTN_TWO):
-    print("button2 unpressed")
-  else:
-    print("button2 pressed")
-  nButton = 2
-
-# Buton 3 => brightness
-def button3(channel):
-  global nButton
-  if GPIO.input(BTN_THREE):
-    print("button3 unpressed")
-  else:
-    print("button3 pressed")
-  nButton = 3
-
-def button4(channel):
-  global nButton
-  if GPIO.input(BTN_FOUR):
-    print("button4 unpressed")
-  else:
-    print("button4 pressed")
-  nButton = 4
-
 def read_kbd_input(inputQueue):
   print('Ready for keyboard input:')
   while (True):
@@ -232,7 +195,7 @@ def fReadConfig():
 
 
 def fActions():
-  global nMode, nButton, bIsWifiActivated, oMusic, oDisplay, oAlarm, oConfig
+  global nMode, bIsWifiActivated, oMusic, oDisplay, oAlarm, oConfig
   global oButton1, oButton2, oButton3, oButton4
 
   # nMode
@@ -452,7 +415,7 @@ def fDisplay():
 
 
 def fCommands():
-  global bContinue, nButton, inputQueue, now, nMode, oAlarm, oMusic
+  global bContinue, inputQueue, now, nMode, oAlarm, oMusic
 
   if (inputQueue.qsize() > 0):
     input_str = inputQueue.get()
@@ -461,15 +424,16 @@ def fCommands():
     if (input_str == "q"):
       bContinue = False
     elif (input_str == "1"):
-      nButton = 1
+      oButton1.bPressed = True
     elif (input_str == "2"):
-      nButton = 2
+      oButton2.bPressed = True
     elif (input_str == "3"):
-      nButton = 3
+      oButton3.bPressed = True
     elif (input_str == "+"):
-      nButton = 4
-    elif (input_str == "-"):
-      nButton = 5
+      oButton4.bPressed = True
+#    elif (input_str == "-"):
+#      oButton5.bPressed = True
+#      nButton = 5
 
     elif (input_str == "pmode"):
       print("mode: ", nMode)
@@ -565,8 +529,7 @@ def main():
   while (bContinue):
 
     fCommands()
-    if (nButton != 0):
-      fActions()
+    fActions()
     fAlarm()
     fDisplay()
 
