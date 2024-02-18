@@ -48,7 +48,7 @@ class cMusic:
     self.iMusicPlay = 0
     self.fVolume = 0.2
     self.fVolume_prev = self.fVolume
-    self.sDirectory = "Louane - Jour 1"
+    self.sDirectory = "music/Louane - Jour 1"
     self.sDirPos = 0
     self.sMusicFilename = "01 - Jour 1.mp3"
   
