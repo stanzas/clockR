@@ -50,7 +50,7 @@ class cMusic:
     self.fVolume_prev = self.fVolume
     self.sDirectory = "music/Louane - Jour 1/"
     self.sDirPos = 0
-    self.sMusicFilename = ""
+    self.sMusicFilename = None 
     self.files = os.listdir(os.getcwd() + "/" + self.sDirectory)
     self.files.sort()
 
