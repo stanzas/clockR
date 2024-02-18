@@ -56,8 +56,10 @@ class cMusic:
     files = os.listdir(self.sDirectory)
     if files:
       self.sDirPos = 0
+      print ("first filename = ", files[self.sDirPos])
       return files[0]
     else:
+      print ("first song: something went wrong")
       return None
   
   def geSongDirPrev(self):
@@ -65,16 +67,20 @@ class cMusic:
     if ((self.sDirPos - 1) > 0) and \
         ((self.sDirPos -1) < len(files)):
       self.sDirPos = self.sDirPos + 1
+      print ("prev filename = ", files[self.sDirPos])
       return files[self.sDirPos]
     else:
+      print ("prev song: something went wrong")
       return None
 
   def geSongDirNext(self):
     files = os.listdir(self.sDirectory)
     if (self.sDirPos + 1) < len(files):
       self.sDirPos = self.sDirPos + 1
+      print ("prev filename = ", files[self.sDirPos])
       return files[self.sDirPos]
     else:
+      print ("next song: something went wrong")
       return None
 
 class cAlarm:
@@ -233,7 +239,6 @@ def fActions():
   else:
     # Button 1: toggle modes
     if (oButton1.isPressed() == True):
-      print("button 1 pressed in action...")
       if (nMode < 4):
         nMode = nMode + 1
       else:
