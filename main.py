@@ -79,7 +79,7 @@ class cMusic:
           ((self.sDirPos - 1) <= len(self.files)):
         self.sDirPos = self.sDirPos - 1
         self.sMusicFilename = self.files[self.sDirPos]
-        return self.sDirectory + self.files[self.sDirPos]
+        return self.getFullPathCurrentSong()
       else:
         print ("prev song: something went wrong")
         return None
