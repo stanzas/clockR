@@ -48,12 +48,13 @@ class cMusic:
     self.iMusicPlay = 0
     self.fVolume = 0.2
     self.fVolume_prev = self.fVolume
-    self.sDirectory = "music/Louane - Jour 1"
+    self.sDirectory = "music/Louane - Jour 1/"
     self.sDirPos = 0
     self.sMusicFilename = ""
     self.files = os.listdir(self.sDirectory).sort()
   
   def getSongDirFirst(self):
+    print (self.files)
     if self.files:
       self.sDirPos = 0
       print ("first filename = ", self.files[self.sDirPos])
@@ -64,25 +65,27 @@ class cMusic:
       return None
   
   def getSongDirPrev(self):
-    if ((self.sDirPos - 1) > 0) and \
-        ((self.sDirPos -1) < len(self.files)):
-      self.sDirPos = self.sDirPos + 1
-      print ("prev filename = ", self.files[self.sDirPos])
-      self.sMusicFilename = self.files[self.sDirPos]
-      return self.files[self.sDirPos]
-    else:
-      print ("prev song: something went wrong")
-      return None
+    if (self.files):
+      if ((self.sdirpos - 1) > 0) and \
+          ((self.sdirpos -1) < len(self.files)):
+        self.sdirpos = self.sdirpos + 1
+        print ("prev filename = ", self.files[self.sdirpos])
+        self.smusicfilename = self.files[self.sdirpos]
+        return self.files[self.sdirpos]
+      else:
+        print ("prev song: something went wrong")
+        return none
 
-  def getSongDirNext(self):
-    if (self.sDirPos + 1) < len(self.files):
-      self.sDirPos = self.sDirPos + 1
-      print ("prev filename = ", self.files[self.sDirPos])
-      self.sMusicFilename = self.files[self.sDirPos]
-      return self.files[self.sDirPos]
-    else:
-      print ("next song: something went wrong")
-      return None
+  def getsongdirnext(self):
+    if (self.files):
+      if (self.sDirPos + 1) < len(self.files):
+        self.sDirPos = self.sDirPos + 1
+        print ("prev filename = ", self.files[self.sDirPos])
+        self.sMusicFilename = self.files[self.sDirPos]
+        return self.files[self.sDirPos]
+      else:
+        print ("next song: something went wrong")
+        return None
 
 class cAlarm:
   def __init__(self):
