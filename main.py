@@ -75,11 +75,11 @@ class cMusic:
       return None
 
   def getSongDirNext(self):
-    if (self.sDirPos + 1) < len(files):
+    if (self.sDirPos + 1) < len(self.files):
       self.sDirPos = self.sDirPos + 1
-      print ("prev filename = ", files[self.sDirPos])
-      self.sMusicFilename = files[self.sDirPos]
-      return files[self.sDirPos]
+      print ("prev filename = ", self.files[self.sDirPos])
+      self.sMusicFilename = self.files[self.sDirPos]
+      return self.files[self.sDirPos]
     else:
       print ("next song: something went wrong")
       return None
