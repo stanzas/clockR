@@ -48,7 +48,34 @@ class cMusic:
     self.iMusicPlay = 0
     self.fVolume = 0.2
     self.fVolume_prev = self.fVolume
+    self.sDirectory = "Louane - Jour 1"
+    self.sDirPos = 0
     self.sMusicFilename = "01 - Jour 1.mp3"
+  
+  def getSongDirFirst(self):
+    files = os.listdir(self.sDirectory)
+    if files:
+      self.sDirPos = 0
+      return files[0]
+    else:
+      return None
+  
+  def geSongDirPrev(self):
+    files = os.listdir(self.sDirectory)
+    if ((self.sDirPos - 1) > 0) and \
+        ((self.sDirPos -1) < len(files)):
+      self.sDirPos = self.sDirPos + 1
+      return files[self.sDirPos]
+    else:
+      return None
+
+  def geSongDirNext(self):
+    files = os.listdir(self.sDirectory)
+    if (self.sDirPos + 1) < len(files):
+      self.sDirPos = self.sDirPos + 1
+      return files[self.sDirPos]
+    else:
+      return None
 
 class cAlarm:
   def __init__(self):
@@ -256,6 +283,7 @@ def fActions():
       # button 2: play/stop
       if (oButton2.isPressed() == True):
         if (oMusic.iMusicPlay == 0):
+          oMusic.getSongDirFirst()
           pygame.mixer.music.load(oAlarm.sMusicFilename)
           pygame.mixer.music.set_volume(oMusic.fVolume)
           pygame.mixer.music.play()
@@ -270,8 +298,10 @@ def fActions():
 
       # button 3: next or stop?
       elif (oButton3.isPressed() == True):
-        #pygame.mixer.music.stop()
-        oMusic.iMusicPlay = 0
+        oMusic.getSongDirNext()
+        pygame.mixer.music.load(oAlarm.sMusicFilename)
+        pygame.mixer.music.play()
+        oMusic.iMusicPlay = 1
         oDisplay.iInfo = 2
 
       # button 4: button +
