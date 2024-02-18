@@ -50,10 +50,10 @@ class cMusic:
     self.fVolume_prev = self.fVolume
     self.sDirectory = "music/Louane - Jour 1"
     self.sDirPos = 0
-    self.sMusicFilename = "01 - Jour 1.mp3"
+    self.sMusicFilename = ""
   
   def getSongDirFirst(self):
-    files = os.listdir(self.sDirectory)
+    files = os.listdir(self.sDirectory).sort()
     if files:
       self.sDirPos = 0
       print ("first filename = ", files[self.sDirPos])
@@ -63,8 +63,8 @@ class cMusic:
       print ("first song: something went wrong")
       return None
   
-  def geSongDirPrev(self):
-    files = os.listdir(self.sDirectory)
+  def getSongDirPrev(self):
+    files = os.listdir(self.sDirectory).sort()
     if ((self.sDirPos - 1) > 0) and \
         ((self.sDirPos -1) < len(files)):
       self.sDirPos = self.sDirPos + 1
@@ -75,8 +75,8 @@ class cMusic:
       print ("prev song: something went wrong")
       return None
 
-  def geSongDirNext(self):
-    files = os.listdir(self.sDirectory)
+  def getSongDirNext(self):
+    files = os.listdir(self.sDirectory).sort()
     if (self.sDirPos + 1) < len(files):
       self.sDirPos = self.sDirPos + 1
       print ("prev filename = ", files[self.sDirPos])
