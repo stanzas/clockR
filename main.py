@@ -295,8 +295,7 @@ def fActions():
       # button 2: play/stop
       if (oButton2.isPressed() == True):
         if (oMusic.iMusicPlay == 0):
-          oMusic.getSongDirFirst()
-          pygame.mixer.music.load(oMusic.sMusicFilename)
+          pygame.mixer.music.load(oMusic.getSongDirFirst())
           pygame.mixer.music.set_volume(oMusic.fVolume)
           pygame.mixer.music.play()
           oMusic.iMusicPlay = 1
