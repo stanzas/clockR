@@ -57,6 +57,7 @@ class cMusic:
     if files:
       self.sDirPos = 0
       print ("first filename = ", files[self.sDirPos])
+      self.sMusicFilename = files[self.sDirPos]
       return files[0]
     else:
       print ("first song: something went wrong")
@@ -68,6 +69,7 @@ class cMusic:
         ((self.sDirPos -1) < len(files)):
       self.sDirPos = self.sDirPos + 1
       print ("prev filename = ", files[self.sDirPos])
+      self.sMusicFilename = files[self.sDirPos]
       return files[self.sDirPos]
     else:
       print ("prev song: something went wrong")
@@ -78,6 +80,7 @@ class cMusic:
     if (self.sDirPos + 1) < len(files):
       self.sDirPos = self.sDirPos + 1
       print ("prev filename = ", files[self.sDirPos])
+      self.sMusicFilename = files[self.sDirPos]
       return files[self.sDirPos]
     else:
       print ("next song: something went wrong")
