@@ -296,7 +296,7 @@ def fActions():
       if (oButton2.isPressed() == True):
         if (oMusic.iMusicPlay == 0):
           oMusic.getSongDirFirst()
-          pygame.mixer.music.load(oAlarm.sMusicFilename)
+          pygame.mixer.music.load(oMusic.sMusicFilename)
           pygame.mixer.music.set_volume(oMusic.fVolume)
           pygame.mixer.music.play()
           oMusic.iMusicPlay = 1
@@ -311,7 +311,7 @@ def fActions():
       # button 3: next or stop?
       elif (oButton3.isPressed() == True):
         oMusic.getSongDirNext()
-        pygame.mixer.music.load(oAlarm.sMusicFilename)
+        pygame.mixer.music.load(oMusic.sMusicFilename)
         pygame.mixer.music.play()
         oMusic.iMusicPlay = 1
         oDisplay.iInfo = 2
