@@ -55,12 +55,8 @@ class cMusic:
     self.files.sort()
   
   def getSongDirFirst(self):
-    print (self.sDirectory)
-    print (self.files)
-    print (self.sDirectory + self.files[0])
     if self.files:
       self.sDirPos = 0
-      print ("first filename = ", self.files[self.sDirPos])
       self.sMusicFilename = self.files[self.sDirPos]
       return self.sDirectory + self.files[0]
     else:
@@ -69,19 +65,18 @@ class cMusic:
   
   def getSongDirPrev(self):
     if (self.files):
-      if ((self.sdirpos - 1) > 0) and \
-          ((self.sdirpos -1) < len(self.files)):
-        self.sdirpos = self.sdirpos + 1
-        print ("prev filename = ", self.files[self.sdirpos])
-        self.smusicfilename = self.files[self.sdirpos]
-        return self.files[self.sdirpos]
+      if ((self.sDirPos - 1) > 0) and \
+          ((self.sDirPos -1) < len(self.files)):
+        self.sDirPos = self.sDirPos + 1
+        self.sMusicFilename = self.files[self.sDirPos]
+        return self.files[self.sDirPos]
       else:
         print ("prev song: something went wrong")
-        return none
+        return None
 
-  def getsongdirnext(self):
+  def getSongDirNext(self):
     if (self.files):
-      if (self.sDirPos + 1) < len(self.files):
+      if (self.sDirPos + 1) <= len(self.files):
         self.sDirPos = self.sDirPos + 1
         print ("prev filename = ", self.files[self.sDirPos])
         self.sMusicFilename = self.files[self.sDirPos]
@@ -309,8 +304,7 @@ def fActions():
 
       # button 3: next or stop?
       elif (oButton3.isPressed() == True):
-        oMusic.getSongDirNext()
-        pygame.mixer.music.load(oMusic.sMusicFilename)
+        pygame.mixer.music.load(oMusic.getSongDirNext())
         pygame.mixer.music.play()
         oMusic.iMusicPlay = 1
         oDisplay.iInfo = 2
