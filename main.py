@@ -53,12 +53,22 @@ class cMusic:
     self.sMusicFilename = ""
     self.files = os.listdir(os.getcwd() + "/" + self.sDirectory)
     self.files.sort()
-  
+
+  def getFullPathCurrentSong(self):
+    print (self.sDirectory + self.sMusicFilename)
+    return self.sDirectory + self.sMusicFilename
+
+  def getSongCurrent(self):
+    if (self.sMusicFilename != None):
+      return self.getFullPathCurrentSong()
+    else:
+      return self.getSongDirFirst()
+ 
   def getSongDirFirst(self):
     if self.files:
       self.sDirPos = 0
       self.sMusicFilename = self.files[self.sDirPos]
-      return self.sDirectory + self.files[0]
+      return self.getFullPathCurrentSong()
     else:
       print ("first song: something went wrong")
       return None
@@ -78,9 +88,8 @@ class cMusic:
     if (self.files):
       if (self.sDirPos + 1) <= len(self.files):
         self.sDirPos = self.sDirPos + 1
-        print ("prev filename = ", self.files[self.sDirPos])
         self.sMusicFilename = self.files[self.sDirPos]
-        return self.sDirectory + self.files[self.sDirPos]
+        return self.getFullPathCurrentSong()
       else:
         print ("next song: something went wrong")
         return None
@@ -290,7 +299,7 @@ def fActions():
       # button 2: play/stop
       if (oButton2.isPressed() == True):
         if (oMusic.iMusicPlay == 0):
-          pygame.mixer.music.load(oMusic.getSongDirFirst())
+          pygame.mixer.music.load(oMusic.getCurrentSong())
           pygame.mixer.music.set_volume(oMusic.fVolume)
           pygame.mixer.music.play()
           oMusic.iMusicPlay = 1
