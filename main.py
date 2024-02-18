@@ -51,32 +51,30 @@ class cMusic:
     self.sDirectory = "music/Louane - Jour 1"
     self.sDirPos = 0
     self.sMusicFilename = ""
+    self.files = os.listdir(self.sDirectory).sort()
   
   def getSongDirFirst(self):
-    files = os.listdir(self.sDirectory).sort()
-    if files:
+    if self.files:
       self.sDirPos = 0
-      print ("first filename = ", files[self.sDirPos])
-      self.sMusicFilename = files[self.sDirPos]
-      return files[0]
+      print ("first filename = ", self.files[self.sDirPos])
+      self.sMusicFilename = self.files[self.sDirPos]
+      return self.files[0]
     else:
       print ("first song: something went wrong")
       return None
   
   def getSongDirPrev(self):
-    files = os.listdir(self.sDirectory).sort()
     if ((self.sDirPos - 1) > 0) and \
-        ((self.sDirPos -1) < len(files)):
+        ((self.sDirPos -1) < len(self.files)):
       self.sDirPos = self.sDirPos + 1
-      print ("prev filename = ", files[self.sDirPos])
-      self.sMusicFilename = files[self.sDirPos]
-      return files[self.sDirPos]
+      print ("prev filename = ", self.files[self.sDirPos])
+      self.sMusicFilename = self.files[self.sDirPos]
+      return self.files[self.sDirPos]
     else:
       print ("prev song: something went wrong")
       return None
 
   def getSongDirNext(self):
-    files = os.listdir(self.sDirectory).sort()
     if (self.sDirPos + 1) < len(files):
       self.sDirPos = self.sDirPos + 1
       print ("prev filename = ", files[self.sDirPos])
