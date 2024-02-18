@@ -51,16 +51,16 @@ class cMusic:
     self.sDirectory = "music/Louane - Jour 1/"
     self.sDirPos = 0
     self.sMusicFilename = ""
-    self.files = os.listdir(self.sDirectory).sort()
-    print ("current os : ", os.getcwd())
+    self.files = os.listdir(os.getcwd() + "/" + self.sDirectory).sort()
   
   def getSongDirFirst(self):
+    print (self.sDirectory)
     print (self.files)
     if self.files:
       self.sDirPos = 0
       print ("first filename = ", self.files[self.sDirPos])
       self.sMusicFilename = self.files[self.sDirPos]
-      return self.files[0]
+      return self.sDirectory + self.files[0]
     else:
       print ("first song: something went wrong")
       return None
